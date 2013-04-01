@@ -25,48 +25,48 @@
 #define SERVER_H
 
 #include <vector>
-#include "connection.h"
+#include "../com/connection.h"
 
 namespace client_server {
     /* A server listens to a port and handles multiple connections */
     class Server {
         friend class Connection;
-        
+
     public:
         /* Create a server that listens to the port 'port' */
         Server(int port);
-        
+
         /* Delete all registered connections */
         virtual ~Server();
-        
+
         /* Returns true if the server has been initialized correctly */
         bool isReady() const;
-        
+
         /* Wait for activity on the port. Returns a previously registered
         connection object if an "old" connection wishes to communicate,
         0 if a new client wishes to communicate */
         Connection* waitForActivity() const;
-        
+
         /* Register a new connection */
         void registerConnection(Connection* conn);
-        
-        /* Deregister a connection (nothing happens if conns isn't 
+
+        /* Deregister a connection (nothing happens if conns isn't
         registered */
         void deregisterConnection(Connection* conn);
-        
+
     protected:
         /* The number of the communication socket */
         int my_socket;
 
         /* Number of registered connections */
         int no_of_connections;
-        
+
         /* List of registered connections */
         std::vector<Connection*> connections;
-        
+
         /* ? */
         mutable int pending_socket;
-        
+
         /* Print error message and exit */
         void error(const char* msg) const;
     };

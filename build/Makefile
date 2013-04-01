@@ -9,19 +9,20 @@ CXXFLAGS	+= -Wmissing-braces -Wparentheses
 # The following option cannot be used since some of the socket
 # macros give warnings on "old-style-cast"
 #CXXFLAGS	+= -Wold-style-cast
-
-SRC	= $(wildcard *.cc)
+SRCPATH = ../src
+SRC	= $(wildcard $(SRCPATH)/**/*.cc)
 
 .PHONY: all clean cleaner
 
 all: libclientserver.a
 
+ # include $(notdir $(SRC:.cc=.d))
 # Create the library; ranlib is for Darwin and maybe other systems.
 # Doesn't seem to do any damage on other systems.
 
-libclientserver.a: connection.o server.o
+libclientserver.a: ../src/com/connection.o ../src/server/server.o
 	ar rv libclientserver.a \
-	connection.o server.o
+	../src/com/connection.o ../src/server/server.o
 	ranlib libclientserver.a
 
 clean:

@@ -1,7 +1,7 @@
 /* myclient.cc: sample client program */
 
-#include "connection.h"
-#include "connectionclosedexception.h"
+#include "com/connection.h"
+#include "com/connectionclosedexception.h"
 
 #include <iostream>
 #include <string>
@@ -38,13 +38,13 @@ int main(int argc, char* argv[]) {
         cerr << "Usage: myclient host-name port-number" << endl;
         exit(1);
     }
-    
+
     Connection conn(argv[1], atoi(argv[2]));
     if (! conn.isConnected()) {
         cerr << "Connection attempt failed" << endl;
         exit(1);
     }
-    
+
     cout << "Type a number: ";
     int nbr;
     while (cin >> nbr) {
@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
             string answer = readString(conn);
             cout << nbr << " is " << answer << endl;
             cout << "Type another number: ";
-        } 
+        }
         catch (ConnectionClosedException&) {
             cerr << "Server closed down!" << endl;
             exit(1);

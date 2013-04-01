@@ -1,8 +1,8 @@
 /* myserver.cc: sample server program */
 
-#include "server.h"
-#include "connection.h"
-#include "connectionclosedexception.h"
+#include "server/server.h"
+#include "com/connection.h"
+#include "com/connectionclosedexception.h"
 
 #include <iostream>
 #include <string>
@@ -21,7 +21,7 @@ int readNumber(Connection* conn) {
     unsigned char byte2 = conn->read();
     unsigned char byte3 = conn->read();
     unsigned char byte4 = conn->read();
-    return (byte1 << 24) | (byte2 << 16) | 
+    return (byte1 << 24) | (byte2 << 16) |
         (byte3 << 8) | byte4;
 }
 
@@ -39,13 +39,13 @@ int main(int argc, char* argv[]){
         cerr << "Usage: myserver port-number" << endl;
         exit(1);
     }
-    
+
     Server server(atoi(argv[1]));
     if (! server.isReady()) {
         cerr << "Server initialization error" << endl;
         exit(1);
     }
-    
+
     while (true) {
         Connection* conn = server.waitForActivity();
         if (conn != 0) {
