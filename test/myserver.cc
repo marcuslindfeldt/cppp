@@ -1,17 +1,17 @@
 /* myserver.cc: sample server program */
 
-#include "server/server.h"
-#include "com/connection.h"
-#include "com/connectionclosedexception.h"
+#include "../src/server/server.h"
+#include "../src/com/connection.h"
+#include "../src/com/connectionclosedexception.h"
 
 #include <iostream>
 #include <string>
 #include <cstdlib>
 
 using namespace std;
-using client_server::Server;
-using client_server::Connection;
-using client_server::ConnectionClosedException;
+using server::Server;
+using com::Connection;
+using com::ConnectionClosedException;
 
 /*
  * Read an integer from a client.

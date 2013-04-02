@@ -1,15 +1,15 @@
 /* myclient.cc: sample client program */
 
-#include "com/connection.h"
-#include "com/connectionclosedexception.h"
+#include "../src/com/connection.h"
+#include "../src/com/connectionclosedexception.h"
 
 #include <iostream>
 #include <string>
 #include <cstdlib>    /* for exit() and atoi() */
 
 using namespace std;
-using client_server::Connection;
-using client_server::ConnectionClosedException;
+using com::Connection;
+using com::ConnectionClosedException;
 
 
 /*
