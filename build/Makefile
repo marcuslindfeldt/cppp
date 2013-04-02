@@ -25,7 +25,7 @@ libclientserver.a: ../src/com/connection.o ../src/server/server.o
 	ranlib libclientserver.a
 
 clean:
-	$(RM) *.o
+	$(RM) $(SRCPATH)/**/*.o
 
 cleaner: clean
 	$(RM) libclientserver.a
