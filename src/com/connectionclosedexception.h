@@ -14,7 +14,7 @@
 #ifndef CONNECTION_CLOSED_EXCEPTION_H
 #define CONNECTION_CLOSED_EXCEPTION_H
 
-namespace client_server {
+namespace com {
     /* ConnectionClosedException is thrown when a connection is closed */
     struct ConnectionClosedException {};
 }

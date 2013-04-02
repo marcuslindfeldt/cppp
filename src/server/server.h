@@ -27,10 +27,11 @@
 #include <vector>
 #include "../com/connection.h"
 
-namespace client_server {
+
+namespace server {
     /* A server listens to a port and handles multiple connections */
     class Server {
-        friend class Connection;
+        friend class com::Connection;
 
     public:
         /* Create a server that listens to the port 'port' */
@@ -45,14 +46,14 @@ namespace client_server {
         /* Wait for activity on the port. Returns a previously registered
         connection object if an "old" connection wishes to communicate,
         0 if a new client wishes to communicate */
-        Connection* waitForActivity() const;
+        com::Connection* waitForActivity() const;
 
         /* Register a new connection */
-        void registerConnection(Connection* conn);
+        void registerConnection(com::Connection* conn);
 
         /* Deregister a connection (nothing happens if conns isn't
         registered */
-        void deregisterConnection(Connection* conn);
+        void deregisterConnection(com::Connection* conn);
 
     protected:
         /* The number of the communication socket */
@@ -62,7 +63,7 @@ namespace client_server {
         int no_of_connections;
 
         /* List of registered connections */
-        std::vector<Connection*> connections;
+        std::vector<com::Connection*> connections;
 
         /* ? */
         mutable int pending_socket;

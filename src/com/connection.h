@@ -26,49 +26,51 @@
 
 #include "connectionclosedexception.h"
 
-namespace client_server {
     /* forward declaration of class Server */
+namespace server {
+
     class Server;
-    
+}
+namespace com {
     /* A Connection object represents a connection (a socket)  */
     class Connection {
-        friend class Server;
-        
+        friend class server::Server;
+
     public:
         /* Establish a connection to the computer 'host' via
         the port 'port' */
         Connection(const char* host, int port);
-        
+
         /* Create a Connection object, which will be initialized
         by the server */
         Connection();
-        
+
         /* Close the connection */
         virtual ~Connection();
-        
+
         /* Returns true if the connection has been established */
         bool isConnected() const;
-        
+
         /* Write a character */
         void write(unsigned char ch) const throw(ConnectionClosedException);
-        
+
         /* Read a character */
         unsigned char read() const throw(ConnectionClosedException);
-        
+
     protected:
         /* The socket number that this connections communicates on */
         int my_socket;
-        
-        /* Set to true when the constructor has called signal() 
+
+        /* Set to true when the constructor has called signal()
            to ignore broken pipe. See comment in the constructor */
         static bool ignoresPipeSignals;
-        
+
         /* Initialization from server, receives socket number s */
         void initConnection(int s);
-        
+
         /* Server fetches the socket number */
         int getSocket() const;
-        
+
         /* Print error message and exit */
         void error(const char* msg) const;
     };

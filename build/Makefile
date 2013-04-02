@@ -16,7 +16,6 @@ SRC	= $(wildcard $(SRCPATH)/**/*.cc)
 
 all: libclientserver.a
 
- # include $(notdir $(SRC:.cc=.d))
 # Create the library; ranlib is for Darwin and maybe other systems.
 # Doesn't seem to do any damage on other systems.
 

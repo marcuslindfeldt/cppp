@@ -37,12 +37,12 @@
 #include <sys/uio.h>     /* read(), write() */
 #include <netinet/in.h>  /* sockaddr_in */
 
-namespace client_server {
+namespace com {
     bool Connection::ignoresPipeSignals = false;
-    
+
     Connection::Connection(const char* host, int port) {
-        /* 
-         * Ignore SIGPIPE signals (broken pipe). A broken pipe (only?) 
+        /*
+         * Ignore SIGPIPE signals (broken pipe). A broken pipe (only?)
          * occurs in a client, when it tries to write to a dead server.
          * When the signal is ignored, ::write() returns -1 as the count
          * of written bytes. Connection::write() tests for this and
@@ -52,10 +52,10 @@ namespace client_server {
             signal(SIGPIPE, SIG_IGN);
             ignoresPipeSignals = true;
         }
-        
+
         sockaddr_in server;
         hostent*    hp;
-        
+
         my_socket = socket(AF_INET,SOCK_STREAM, 0);
         if (my_socket < 0)
             my_socket = -1;
@@ -65,20 +65,20 @@ namespace client_server {
             if (hp == 0)
                 my_socket = -1;
             else {
-                memcpy(reinterpret_cast<char*>(&server.sin_addr), 
-                       reinterpret_cast<char*>(hp->h_addr), 
+                memcpy(reinterpret_cast<char*>(&server.sin_addr),
+                       reinterpret_cast<char*>(hp->h_addr),
                        hp->h_length);
                 server.sin_port = htons(port);
                 if (connect(my_socket,
-                            reinterpret_cast<sockaddr*>(&server), 
+                            reinterpret_cast<sockaddr*>(&server),
                             sizeof(server)) < 0)
                     my_socket = -1;
-            }  
+            }
         }
     }
-    
+
     Connection::Connection() {
-        /* 
+        /*
          * See previous constructor for comments.
          */
         if (! ignoresPipeSignals) {
@@ -87,17 +87,17 @@ namespace client_server {
         }
         my_socket = -1;
     }
-    
+
     Connection::~Connection() {
-        if (my_socket != -1) 
+        if (my_socket != -1)
             close(my_socket);
     }
-    
+
     bool Connection::isConnected() const {
         return my_socket != -1;
     }
-    
-    void Connection::write(unsigned char ch) const 
+
+    void Connection::write(unsigned char ch) const
     throw(ConnectionClosedException) {
         if (my_socket == -1)
             error("Write attempted on a not properly opened Connection");
@@ -105,7 +105,7 @@ namespace client_server {
         if (cnt != 1)
             throw ConnectionClosedException();
     }
-    
+
     unsigned char Connection::read() const throw(ConnectionClosedException) {
         char data;
         if (my_socket == -1)
@@ -115,15 +115,15 @@ namespace client_server {
             throw ConnectionClosedException();
         return data;
     }
-    
+
     void Connection::initConnection(int s) {
         my_socket = s;
     }
-    
+
     int Connection::getSocket() const {
         return my_socket;
     }
-    
+
     void Connection::error(const char* msg) const {
         std::cerr << "Class Connection: " << msg << std::endl;
         exit(1);
