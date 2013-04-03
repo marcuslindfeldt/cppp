@@ -18,10 +18,10 @@ CXXFLAGS  = -ggdb  -Wall -W -pedantic-errors
 CXXFLAGS += -Wmissing-braces -Wparentheses -Wold-style-cast
 
 # Define linker flags
-LDFLAGS	 = -ggdb -L..
+LDFLAGS	 = -ggdb -L../build
 
 # Libraries: -lclientserver is always necessary
-LDLIBS	 = -lclientserver 
+LDLIBS	 = -lclientserver
 # -lsocket is necessary on Solaris
 #LDLIBS	+= -lsocket
 # -lnsl is necessary on Froste (Solaris)
