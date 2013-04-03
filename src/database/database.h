@@ -1,7 +1,7 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 #include <string>
-#include "Article.h"
+#include "article.h"
 
 /* Interface for inmemory database and file database
  *
@@ -15,7 +15,7 @@
             virtual int populateNewsgroup(const Article& art, size_t ngId) = 0;
             virtual int deleteArticle(size_t ngId, size_t artId) = 0;
             virtual int deleteNewsgroup(size_t ngId) = 0;
-            virtual int saveNewsgroup(const std::string& name) = 0;
+            virtual int createNewsgroup(const std::string& name) = 0;
             virtual int populateArticle(size_t ngId, size_t artId) = 0;
 
     };
