@@ -19,7 +19,7 @@ namespace database {
 		return articles.erase(i);
 	}
 
-	Article* Newsgroup::getArticle(size_t i) const {
+	Article* Newsgroup::getArticle(size_t i) {
 		return &articles.find(i)->second;
 	}
 }

@@ -53,8 +53,8 @@ namespace database {
         return it->second.getArticles();
     }
 
-    Article* InMemoryDatabase::getArticle(size_t ngId, size_t artId) const throw(NgNotFoundException, ArtNotFoundException) {
-        map<size_t, Newsgroup>::const_iterator it = db.find(ngId);
+    Article* InMemoryDatabase::getArticle(size_t ngId, size_t artId) throw(NgNotFoundException, ArtNotFoundException) {
+        map<size_t, Newsgroup>::iterator it = db.find(ngId);
         if(it == db.end()) throw NgNotFoundException();
         Article* artP = it->second.getArticle(artId);
         if(artP == 0) throw ArtNotFoundException();

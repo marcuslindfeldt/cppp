@@ -17,7 +17,7 @@ namespace database {
         	std::map<size_t, Article> getArticles() const { return articles; }
         	void addArticle(const std::string& ti, const std::string& a, const std::string& te);
         	size_t delArticle(size_t i);
-        	Article* getArticle(size_t i) const;
+        	Article* getArticle(size_t i);
         private:
         	size_t lastArticleId;
         	std::string name;
