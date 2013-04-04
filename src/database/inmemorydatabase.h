@@ -15,7 +15,7 @@ namespace database {
         public:
 
             InMemoryDatabase() : nbrOfNewsgroup(0), lastNgId(0) {}
-            const Article& getArticle(size_t ngId, size_t artId) const;
+            Article* getArticle(size_t ngId, size_t artId) const throw(NgNotFoundException, ArtNotFoundException);
             std::vector<Article> listArticles(size_t ngId);
             unsigned int createArticle(size_t ngId, const std::string& title, const std::string& author, const std::string& text);
             unsigned int deleteNewsgroup(size_t ngId);
