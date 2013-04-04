@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "article.h"
+#include "newsgroup.h"
 
 /* Interface for inmemory database and file database
  *
@@ -20,7 +21,8 @@
             virtual unsigned int deleteArticle(size_t ngId, size_t artId) = 0;
             virtual unsigned int deleteNewsgroup(size_t ngId) = 0;
             virtual unsigned int createNewsgroup(const std::string& name) = 0;
-            virtual std::vector<Article> listArticles(size_t ngId) = 0;
+            virtual std::map<size_t, Article> listArticles(size_t ngId) const throw(NgNotFoundException) = 0;
+            virtual std::map<size_t, Newsgroup> listNewsgroups() const = 0;
 
     };
  }

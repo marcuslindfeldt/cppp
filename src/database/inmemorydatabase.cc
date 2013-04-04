@@ -11,7 +11,6 @@
 using namespace std;
 using namespace com;
 
-
 namespace database {
 
     unsigned int InMemoryDatabase::createNewsgroup(const string& ngName) {
@@ -31,9 +30,10 @@ namespace database {
             return Protocol::ANS_ACK;
        }
        return Protocol::ERR_NG_ALREADY_EXISTS;
-
     }
-
+    map<size_t, Newsgroup> InMemoryDatabase::listNewsgroups() const  {
+        return db;
+    }
     unsigned int InMemoryDatabase::deleteNewsgroup(size_t ngId) {
         return db.erase(ngId) !=0 ? Protocol::ANS_ACK : Protocol::ERR_NG_DOES_NOT_EXIST;
     }
@@ -43,9 +43,11 @@ namespace database {
         db[ngId].addArticle(title, author, text);
         return Protocol::ANS_ACK;
     }
-    //TODO
-    vector<Article> InMemoryDatabase::listArticles(size_t ngId) {
 
+    map<size_t, Article> InMemoryDatabase::listArticles(size_t ngId) const throw (NgNotFoundException) {
+        map<size_t, Newsgroup>::const_iterator it = db.find(ngId);
+        if(it == db.end()) throw NgNotFoundException();
+        return it->second.getArticles();
     }
 
     Article* InMemoryDatabase::getArticle(size_t ngId, size_t artId) const throw(NgNotFoundException, ArtNotFoundException) {
