@@ -1,12 +1,15 @@
 #include <iostream>
 #include <cstdlib>
 #include "server.h"
+#include "../database/inmemorydatabase.h"
+#include "../database/database.h"
+#include "messageinterpreter.h"
 #include "../com/messagehandler.h"
 #include "../com/connection.h"
 
 using namespace server;
 using namespace com;
-
+using namespace database;
 using namespace std;
 
 int main (int argc, char** argv){
@@ -20,12 +23,24 @@ int main (int argc, char** argv){
         cerr << "Server init failed" << endl;
         exit(1);
     }
+    Database* db = new InMemoryDatabase();
     cout << "Server running at port: " << argv[1] << endl;
     while(true) {
         Connection* conn = server.waitForActivity();
+        MessageHandler mh (conn);
+        MessageInterpreter mi;
         try {
             if(conn != 0) {
                 cout << "Connection established" << endl;
+                try {
+                mi.interpretAndPerformCmd(mh, *db);
+
+                }
+                catch(IllegalCommandException&){
+                server.deregisterConnection(conn);
+                delete conn;
+
+                }
             }
             else {
                 server.registerConnection(new Connection);

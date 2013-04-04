@@ -11,28 +11,29 @@ using namespace std;
 
 namespace server {
 
-    void MessageInterpreter::interpretMessage(int code) throw(IllegalCommandException, ConnectionClosedException) {
+    void MessageInterpreter::interpretAndPerformCmd(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
+        int code = msgHandler.recvCode();
         switch(code){
             case Protocol::COM_LIST_NG:
-                listNg();
+                listNg(msgHandler,database);
                 break;
             case Protocol::COM_CREATE_NG:
-                createNg();
+                createNg(msgHandler,database);
                 break;
             case Protocol::COM_DELETE_NG:
-                deleteNg();
+                deleteNg(msgHandler,database);
                 break;
             case Protocol::COM_LIST_ART:
-                listArt();
+                listArt(msgHandler,database);
                 break;
             case Protocol::COM_CREATE_ART:
-                createArt();
+                createArt(msgHandler,database);
                 break;
             case Protocol::COM_DELETE_ART:
-                deleteArt();
+                deleteArt(msgHandler,database);
                 break;
             case Protocol::COM_GET_ART:
-                getArt();
+                getArt(msgHandler,database);
                 break;
             default:
                 throw IllegalCommandException();
@@ -41,7 +42,7 @@ namespace server {
         msgHandler.sendCode(Protocol::ANS_END);
     }
 
-    void MessageInterpreter::listNg() throw(IllegalCommandException, ConnectionClosedException) {
+    void MessageInterpreter::listNg(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
         if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
         map<size_t, Newsgroup> ngs = database.listNewsgroups();
         msgHandler.sendCode(Protocol::ANS_LIST_NG);
@@ -52,7 +53,7 @@ namespace server {
         }
     }
 
-    void MessageInterpreter::createNg() throw(IllegalCommandException, ConnectionClosedException) {
+    void MessageInterpreter::createNg(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
         string name = msgHandler.recvStringParameter();
         if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
         msgHandler.sendCode(Protocol::ANS_CREATE_NG);
@@ -63,7 +64,7 @@ namespace server {
         msgHandler.sendCode(code);
     }
 
-    void MessageInterpreter::deleteNg() throw(IllegalCommandException, ConnectionClosedException) {
+    void MessageInterpreter::deleteNg(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
         int id = msgHandler.recvIntParameter();
         if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
         msgHandler.sendCode(Protocol::ANS_DELETE_NG);
@@ -74,7 +75,7 @@ namespace server {
         msgHandler.sendCode(code);
     }
 
-    void MessageInterpreter::listArt() throw(IllegalCommandException, ConnectionClosedException) {
+    void MessageInterpreter::listArt(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
         int id = msgHandler.recvIntParameter();
         if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
         msgHandler.sendCode(Protocol::ANS_LIST_ART);
@@ -92,7 +93,7 @@ namespace server {
         }
     }
 
-    void MessageInterpreter::createArt() throw(IllegalCommandException, ConnectionClosedException) {
+    void MessageInterpreter::createArt(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
         int id = msgHandler.recvIntParameter();
         string title = msgHandler.recvStringParameter();
         string author = msgHandler.recvStringParameter();
@@ -106,7 +107,7 @@ namespace server {
         msgHandler.sendCode(code);
     }
 
-    void MessageInterpreter::deleteArt() throw(IllegalCommandException, ConnectionClosedException) {
+    void MessageInterpreter::deleteArt(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
         int ngId = msgHandler.recvIntParameter();
         int artId = msgHandler.recvIntParameter();
         if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
@@ -118,7 +119,7 @@ namespace server {
         msgHandler.sendCode(code);
     }
 
-    void MessageInterpreter::getArt() throw(IllegalCommandException, ConnectionClosedException) {
+    void MessageInterpreter::getArt(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
         int ngId = msgHandler.recvIntParameter();
         int artId = msgHandler.recvIntParameter();
         if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
