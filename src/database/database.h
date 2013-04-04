@@ -9,6 +9,9 @@
  */
  namespace database{
 
+    struct NgNotFoundException{};
+    struct ArtNotFoundException{};
+
     class Database {
         public:
             virtual ~Database(){};
@@ -20,9 +23,6 @@
             virtual std::vector<Article> listArticles(size_t ngId) = 0;
 
     };
-
-    struct NgNotFoundException{};
-    struct ArtNotFoundException{};
  }
 
 #endif
