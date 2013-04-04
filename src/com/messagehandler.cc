@@ -1,6 +1,7 @@
 #include "messagehandler.h"
 #include "protocol.h"
 
+
 namespace com {
 
 	/** 
@@ -9,7 +10,7 @@ namespace com {
 	*/
 	void MessageHandler::sendByte(int byte) const
 	{
-		conn.write(static_cast<unsigned char>(byte));
+		conn->write(static_cast<unsigned char>(byte));
 	}
 
 	/**
@@ -54,22 +55,22 @@ namespace com {
 		}
 	}
 
-	const int MessageHandler::recvCode() const
+	int MessageHandler::recvCode() const
 	{
-		return conn.read();
+		return conn->read();
 	}
 
-	const int MessageHandler::recvInt() const
+	int MessageHandler::recvInt() const
 	{
-		unsigned char b1 = conn.read();
-		unsigned char b2 = conn.read();
-		unsigned char b3 = conn.read();
-		unsigned char b4 = conn.read();
+		unsigned char b1 = conn->read();
+		unsigned char b2 = conn->read();
+		unsigned char b3 = conn->read();
+		unsigned char b4 = conn->read();
 
-		return b1 << 24 | b2 << 16 | b3 << 8 | b4;
+		return (b1 << 24) | (b2 << 16) | (b3 << 8) | b4;
 	}
 
-	const int MessageHandler::recvIntParameter()
+	int MessageHandler::recvIntParameter()
 	{
 		int code = recvCode();
 		if(code != Protocol::PAR_NUM){
@@ -90,9 +91,9 @@ namespace com {
 		}
 		std::string res;
 
-		// for(int i = 0; i < n; i++){
-		// 	res.push_back(conn.read());
-		// }
+		for(int i = 0; i < n; i++){
+			res.push_back(conn->read());
+		}
 		return res;
 	}
 }
