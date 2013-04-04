@@ -5,22 +5,22 @@
 #include <string>
 
 namespace com {
-	class MessageHandler
-	{
+	struct IllegalCommandException {};
+
+	class MessageHandler {
 	public:
 		MessageHandler(Connection* c) : conn(c) {};
-		void sendCode(int);
-		void sendInt(int);
-		void sendIntParameter(int);
-		void sendStringParameter(std::string);
-		int recvCode() const;
-		int recvInt() const;
-		int recvIntParameter();
-		const std::string recvStringParameter();
+		void sendCode(int) throw(ConnectionClosedException);
+		void sendInt(int) throw(ConnectionClosedException);
+		void sendIntParameter(int) throw(ConnectionClosedException);
+		void sendStringParameter(std::string) throw(ConnectionClosedException);
+		int recvCode() const throw(ConnectionClosedException);
+		int recvInt() const throw(ConnectionClosedException);
+		int recvIntParameter() throw(IllegalCommandException, ConnectionClosedException);
+		const std::string recvStringParameter() throw(IllegalCommandException, ConnectionClosedException);
 	private:
-		void sendByte(int) const;
+		void sendByte(int) const throw(ConnectionClosedException);
 		Connection* conn;
 	};
 }
-
 #endif

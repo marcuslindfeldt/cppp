@@ -8,8 +8,7 @@ namespace com {
 	* private helper method 
 	* send number ranging from 0-255
 	*/
-	void MessageHandler::sendByte(int byte) const
-	{
+	void MessageHandler::sendByte(int byte) const throw(ConnectionClosedException) {
 		conn->write(static_cast<unsigned char>(byte));
 	}
 
@@ -17,8 +16,7 @@ namespace com {
 	 * Transmit a code (a constant form the Protocol class).
 	 * @param code The code to transmit.
 	 */
-	void MessageHandler::sendCode(int code)
-	{
+	void MessageHandler::sendCode(int code) throw(ConnectionClosedException) {
 		sendByte(code);
 	}
 
@@ -26,8 +24,7 @@ namespace com {
 	 * Transmit an int value, according to the protocol
 	 * @param value The integer to transmitt
 	 */
-	void MessageHandler::sendInt(int value)
-	{
+	void MessageHandler::sendInt(int value) throw(ConnectionClosedException) {
 	    sendByte((value >> 24) & 0xFF);
 	    sendByte((value >> 16) & 0xFF);
 	    sendByte((value >> 8)  & 0xFF);
@@ -38,14 +35,12 @@ namespace com {
 	 * Transmit an int parameter, according to the protocol.
 	 * @param param The parameter to transmitt
 	 */
-	void MessageHandler::sendIntParameter(int param)
-	{
+	void MessageHandler::sendIntParameter(int param) throw(ConnectionClosedException) {
 		sendByte(Protocol::PAR_NUM);
 		sendInt(param);
 	}
 
-	void MessageHandler::sendStringParameter(std::string param)
-	{
+	void MessageHandler::sendStringParameter(std::string param) throw(ConnectionClosedException) {
 		size_t len = param.length();
 		sendCode(Protocol::PAR_STRING);
 		sendInt(len);
@@ -55,13 +50,11 @@ namespace com {
 		}
 	}
 
-	int MessageHandler::recvCode() const
-	{
+	int MessageHandler::recvCode() const throw(ConnectionClosedException) {
 		return conn->read();
 	}
 
-	int MessageHandler::recvInt() const
-	{
+	int MessageHandler::recvInt() const throw(ConnectionClosedException) {
 		unsigned char b1 = conn->read();
 		unsigned char b2 = conn->read();
 		unsigned char b3 = conn->read();
@@ -70,24 +63,22 @@ namespace com {
 		return (b1 << 24) | (b2 << 16) | (b3 << 8) | b4;
 	}
 
-	int MessageHandler::recvIntParameter()
-	{
+	int MessageHandler::recvIntParameter() throw(IllegalCommandException, ConnectionClosedException) {
 		int code = recvCode();
 		if(code != Protocol::PAR_NUM){
-			throw ConnectionClosedException();
+			throw IllegalCommandException();
 		}
 		return recvInt();
 	}
 
-	const std::string MessageHandler::recvStringParameter()
-	{
+	const std::string MessageHandler::recvStringParameter() throw(IllegalCommandException, ConnectionClosedException) {
 		int code = recvCode();
 		if(code != Protocol::PAR_STRING){
-			throw ConnectionClosedException();
+			throw IllegalCommandException();
 		}
 		int n = recvInt();
 		if(n < 0){
-			throw ConnectionClosedException();
+			throw IllegalCommandException();
 		}
 		std::string res;
 

@@ -47,7 +47,7 @@ namespace database {
         return Protocol::ANS_ACK;
     }
 
-    map<size_t, Article> InMemoryDatabase::listArticles(size_t ngId) const throw (NgNotFoundException) {
+    map<size_t, Article> InMemoryDatabase::listArticles(size_t ngId) const throw(NgNotFoundException) {
         map<size_t, Newsgroup>::const_iterator it = db.find(ngId);
         if(it == db.end()) throw NgNotFoundException();
         return it->second.getArticles();

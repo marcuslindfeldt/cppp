@@ -11,7 +11,7 @@ using namespace std;
 
 namespace server {
 
-    void MessageInterpreter::interpretMessage(int code) throw(ConnectionClosedException) {
+    void MessageInterpreter::interpretMessage(int code) throw(IllegalCommandException, ConnectionClosedException) {
         switch(code){
             case Protocol::COM_LIST_NG:
                 listNg();
@@ -35,13 +35,14 @@ namespace server {
                 getArt();
                 break;
             default:
+                throw IllegalCommandException();
                 break;
         }
         msgHandler.sendCode(Protocol::ANS_END);
     }
 
-    void MessageInterpreter::listNg() {
-        if(msgHandler.recvCode() != Protocol::COM_END) throw ConnectionClosedException();
+    void MessageInterpreter::listNg() throw(IllegalCommandException, ConnectionClosedException) {
+        if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
         map<size_t, Newsgroup> ngs = database.listNewsgroups();
         msgHandler.sendCode(Protocol::ANS_LIST_NG);
         msgHandler.sendIntParameter(ngs.size());
@@ -51,9 +52,9 @@ namespace server {
         }
     }
 
-    void MessageInterpreter::createNg() throw(ConnectionClosedException) {
+    void MessageInterpreter::createNg() throw(IllegalCommandException, ConnectionClosedException) {
         string name = msgHandler.recvStringParameter();
-        if(msgHandler.recvCode() != Protocol::COM_END) throw ConnectionClosedException();
+        if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
         msgHandler.sendCode(Protocol::ANS_CREATE_NG);
         unsigned int code = database.createNewsgroup(name);
         if(code == Protocol::ERR_NG_ALREADY_EXISTS) {
@@ -62,9 +63,9 @@ namespace server {
         msgHandler.sendCode(code);
     }
 
-    void MessageInterpreter::deleteNg() throw(ConnectionClosedException) {
+    void MessageInterpreter::deleteNg() throw(IllegalCommandException, ConnectionClosedException) {
         int id = msgHandler.recvIntParameter();
-        if(msgHandler.recvCode() != Protocol::COM_END) throw ConnectionClosedException();
+        if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
         msgHandler.sendCode(Protocol::ANS_DELETE_NG);
         unsigned int code = database.deleteNewsgroup(id);
         if(code == Protocol::ERR_NG_DOES_NOT_EXIST) {
@@ -73,9 +74,9 @@ namespace server {
         msgHandler.sendCode(code);
     }
 
-    void MessageInterpreter::listArt() throw(ConnectionClosedException) {
+    void MessageInterpreter::listArt() throw(IllegalCommandException, ConnectionClosedException) {
         int id = msgHandler.recvIntParameter();
-        if(msgHandler.recvCode() != Protocol::COM_END) throw ConnectionClosedException();
+        if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
         msgHandler.sendCode(Protocol::ANS_LIST_ART);
         try {
             map<size_t, Article> arts = database.listArticles(id);
@@ -91,12 +92,12 @@ namespace server {
         }
     }
 
-    void MessageInterpreter::createArt() throw(ConnectionClosedException) {
+    void MessageInterpreter::createArt() throw(IllegalCommandException, ConnectionClosedException) {
         int id = msgHandler.recvIntParameter();
         string title = msgHandler.recvStringParameter();
         string author = msgHandler.recvStringParameter();
         string text = msgHandler.recvStringParameter();
-        if(msgHandler.recvCode() != Protocol::COM_END) throw ConnectionClosedException();
+        if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
         msgHandler.sendCode(Protocol::ANS_CREATE_ART);
         unsigned int code = database.createArticle(id, title, author, text);
         if(code == Protocol::ERR_NG_DOES_NOT_EXIST) {
@@ -105,10 +106,10 @@ namespace server {
         msgHandler.sendCode(code);
     }
 
-    void MessageInterpreter::deleteArt() throw(ConnectionClosedException) {
+    void MessageInterpreter::deleteArt() throw(IllegalCommandException, ConnectionClosedException) {
         int ngId = msgHandler.recvIntParameter();
         int artId = msgHandler.recvIntParameter();
-        if(msgHandler.recvCode() != Protocol::COM_END) throw ConnectionClosedException();
+        if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
         msgHandler.sendCode(Protocol::ANS_DELETE_ART);
         unsigned int code = database.deleteArticle(ngId, artId);
         if(code == Protocol::ERR_NG_DOES_NOT_EXIST || code == Protocol::ERR_ART_DOES_NOT_EXIST) {
@@ -117,10 +118,10 @@ namespace server {
         msgHandler.sendCode(code);
     }
 
-    void MessageInterpreter::getArt() throw(ConnectionClosedException) {
+    void MessageInterpreter::getArt() throw(IllegalCommandException, ConnectionClosedException) {
         int ngId = msgHandler.recvIntParameter();
         int artId = msgHandler.recvIntParameter();
-        if(msgHandler.recvCode() != Protocol::COM_END) throw ConnectionClosedException();
+        if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
         msgHandler.sendCode(Protocol::ANS_GET_ART);
         try {
             Article* artP = database.getArticle(ngId, artId);
