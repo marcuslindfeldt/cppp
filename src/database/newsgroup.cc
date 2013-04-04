@@ -15,8 +15,8 @@ namespace database {
 		articles.insert(make_pair(id, article));
 	}
 
-	void Newsgroup::delArticle(size_t i) {
-		articles.erase(i);
+	size_t Newsgroup::delArticle(size_t i) {
+		return articles.erase(i);
 	}
 
 	Article* Newsgroup::getArticle(size_t i) const {

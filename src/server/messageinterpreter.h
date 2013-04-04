@@ -3,23 +3,24 @@
 
 #include "../database/inmemorydatabase.h"
 #include "../com/messagehandler.h"
+#include "../com/connectionclosedexception.h"
 
 namespace server {
 
     class MessageInterpreter {
         public:
             MessageInterpreter(com::MessageHandler mh, database::InMemoryDatabase db) : msgHandler(mh), database(db){}
-            void interpretMessage(int code);
+            void interpretMessage(int code) throw(com::ConnectionClosedException);
         private:
             com::MessageHandler msgHandler;
             database::InMemoryDatabase database;
             void listNg();
-            void createNg();
-            void deleteNg();
-            void listArt();
-            void createArt();
-            void deleteArt();
-            void getArt();
+            void createNg() throw(com::ConnectionClosedException);
+            void deleteNg() throw(com::ConnectionClosedException);
+            void listArt() throw(com::ConnectionClosedException);
+            void createArt() throw(com::ConnectionClosedException);
+            void deleteArt() throw(com::ConnectionClosedException);
+            void getArt() throw(com::ConnectionClosedException);
 
     };
 

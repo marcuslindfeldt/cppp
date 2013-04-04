@@ -31,16 +31,19 @@ namespace database {
        }
        return Protocol::ERR_NG_ALREADY_EXISTS;
     }
+
     map<size_t, Newsgroup> InMemoryDatabase::listNewsgroups() const  {
         return db;
     }
+
     unsigned int InMemoryDatabase::deleteNewsgroup(size_t ngId) {
         return db.erase(ngId) !=0 ? Protocol::ANS_ACK : Protocol::ERR_NG_DOES_NOT_EXIST;
     }
 
     unsigned int InMemoryDatabase::createArticle(size_t ngId, const string& title, const string& author, const string& text) {
-       if(db.find(ngId) == db.end()) return Protocol::ERR_NG_DOES_NOT_EXIST;
-        db[ngId].addArticle(title, author, text);
+       map<size_t, Newsgroup>::iterator it = db.find(ngId);
+       if(it == db.end()) return Protocol::ERR_NG_DOES_NOT_EXIST;
+        it->second.addArticle(title, author, text);
         return Protocol::ANS_ACK;
     }
 
@@ -53,15 +56,15 @@ namespace database {
     Article* InMemoryDatabase::getArticle(size_t ngId, size_t artId) const throw(NgNotFoundException, ArtNotFoundException) {
         map<size_t, Newsgroup>::const_iterator it = db.find(ngId);
         if(it == db.end()) throw NgNotFoundException();
-        Article* art = it->second.getArticle(artId);
-        if(art == 0) throw ArtNotFoundException();
-        return art;
+        Article* artP = it->second.getArticle(artId);
+        if(artP == 0) throw ArtNotFoundException();
+        return artP;
     }
 
    unsigned int InMemoryDatabase::deleteArticle(size_t ngId, size_t artId) {
-        if(db.find(ngId) == db.end()) return Protocol::ERR_NG_DOES_NOT_EXIST;
-        if(!db[ngId].getArticles().erase(artId)) return Protocol::ERR_ART_DOES_NOT_EXIST;
+        map<size_t, Newsgroup>::iterator it = db.find(ngId);
+        if(it == db.end()) return Protocol::ERR_NG_DOES_NOT_EXIST;
+        if(it->second.delArticle(artId) == 0) return Protocol::ERR_ART_DOES_NOT_EXIST;
         return Protocol::ANS_ACK;
     }
-
 }
