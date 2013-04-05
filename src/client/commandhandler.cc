@@ -27,13 +27,13 @@ void CommandHandler::interpretAndPerformCmd(std::string theCmdLine) throw(com::I
 			std::back_inserter<std::vector<std::string> >(arguments));
 	if(arguments.size > 0){
 		std::string command = arguments[0];
-		if(command == "listNG"){
+		if(command == "listNewsGroup"){
 			listNg();
 		} else if(arguments.size() == 2){
 			std::string string_param = arguments.at(1);
-			if(command == "createNG"){
+			if(command == "createNewsGroup"){
 				createNg(string_param);
-			} else if (command == "deleteNG" ) {
+			} else if (command == "deleteNewsGroup" ) {
 				deleteNg(string_param);
 			} else if (command == listArt) {
 				listArt(string_param);
@@ -43,12 +43,12 @@ void CommandHandler::interpretAndPerformCmd(std::string theCmdLine) throw(com::I
 			const char* art = (arguments[2]);
 			int grpID = atoi(grp);
 			int artID = atoi(art);
-			if(command == "deleteArt"){
+			if(command == "deleteArticle"){
 				deleteArt(grpID, artID);
-			} else if( command == "getArt"){
+			} else if( command == "getArticle"){
 				getArt(grpID, artID);
 			}
-		} else if( arguments.size() == 5 && command == "createArt"){
+		} else if( arguments.size() == 5 && command == "createArticle"){
 			const char* id = arguments[1];
 			int artID = atoi(id);
 			createArt(artID, arguments[2],arguments[3],arguments[4]);
