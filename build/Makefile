@@ -14,7 +14,7 @@ SRC	= $(wildcard $(SRCPATH)/**/*.cc)
 
 .PHONY: all clean cleaner
 
-all: libclientserver.a server
+all: libclientserver.a server client
 
 # Create the library; ranlib is for Darwin and maybe other systems.
 # Doesn't seem to do any damage on other systems.
@@ -32,6 +32,9 @@ cleaner: clean
 
 server: ../src/server/serverhandler.o ../src/server/messageinterpreter.o ../src/com/messagehandler.o ../src/database/inmemorydatabase.o ../src/database/article.o ../src/database/newsgroup.o libclientserver.a
 		 $(CXX) -o $@ $^
+
+client: ../src/client/client.o ../src/client/messageinterpreter.o ../com/messagehandler.o libclientserver.a
+		$(CXX) -o $@ $^
 
 %.d: %.cc
 	@set -e; rm -f $@; \
