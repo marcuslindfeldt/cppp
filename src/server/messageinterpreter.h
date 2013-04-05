@@ -1,7 +1,7 @@
 #ifndef MESSAGE_INTERPRETER_H
 #define MESSAGE_INTERPRETER_H
 
-#include "../database/inmemorydatabase.h"
+#include "../database/database.h"
 #include "../com/messagehandler.h"
 
 namespace server {
@@ -18,9 +18,6 @@ namespace server {
             void createArt(com::MessageHandler& mh, database::Database& db) throw(com::IllegalCommandException, com::ConnectionClosedException);
             void deleteArt(com::MessageHandler& mh, database::Database& db) throw(com::IllegalCommandException, com::ConnectionClosedException);
             void getArt(com::MessageHandler& mh, database::Database& db) throw(com::IllegalCommandException, com::ConnectionClosedException);
-
     };
-
-
 }
 #endif
