@@ -1,137 +1,136 @@
-/*
- * CommandHandler.cpp
- *
- *  Created on: Apr 5, 2013
- *      Author: fladnag
- */
-
 #include "commandhandler.h"
+
+using namespace std;
+using namespace com;
 
 namespace client {
 
-CommandHandler::CommandHandler(com::MessageHandler& mh) : messageHandler(mh){};
-CommandHandler::~CommandHandler() {}
+	//TODO Sync this with the responses from the server side implementation
 
-//TODO Sync this with the responses from the server side implementation
+	void CommandHandler::interpretAndPerformCmd(MessageHandler& msgHandler, string& theCmdLine, const map<string, Protocol>& mymap) throw(IllegalCommandException, ConnectionClosedException){
+		/*
+		 * This is being implemented with the notion of client commands being issued as:
+		 * "commandtype arg1 arg2 arg3 ..argN"
+		 */
 
-void CommandHandler::interpretAndPerformCmd(std::string theCmdLine, const std::map<std::string, com::Protocol>& mymap) throw(com::IllegalCommandException, com::ConnectionClosedException){
-	/*
-	 * This is being implemented with the notion of client commands being issued as:
-	 * "commandtype arg1 arg2 arg3 ..argN"
-	 */
+		vector<string> arguments;
+		istringstream inputSS(theCmdLine);
+		copy(istream_iterator<string>(inputSS),
+				istream_iterator<string>(),
+				back_inserter<vector<string> >(arguments));
 
-	std::vector<std::string> arguments;
-	std::istringstream inputSS(theCmdLine);
-	std::copy(std::istream_iterator<std::string>(inputSS),
-			std::istream_iterator<std::string>(),
-			std::back_inserter<std::vector<std::string> >(arguments));
-
-	if(arguments.size > 0){
-		std::map< std::string, com::Protocol>::iterator it = mymap.find(arguments.at(0));
-		if(it != mymap.end()){
-			int protocolNbr =  it->second;
-			switch(arguments.size()){
-			case '1':
-				switch(protocolNbr){
-				case com::Protocol::COM_LIST_NG:
-					listNg();
-					break;
-				default:
-					throw com::IllegalCommandException;
-				}
-				break;
-
-				case '2':
-					std::string string_param = arguments.at(1);
+		if(arguments.size > 0) {
+			map<string, Protocol>::iterator it = mymap.find(arguments.at(0));
+			if(it != mymap.end()){
+				int protocolNbr =  it->second;
+				switch(arguments.size()){
+				case '1':
 					switch(protocolNbr){
-					case com::Protocol::COM_CREATE_NG:
-						createNg(string_param);
-						break;
-					case com::Protocol::COM_DELETE_NG:
-						deleteNg(string_param);
-						break;
-					case com::Protocol::COM_LIST_ART:
-						listArt(string_param);
-						break;
-					default:
-						throw com::IllegalCommandException;
-					}
-					break;
-
-					case '3':
-						const char* grp = (arguments[1]);
-						const char* art = (arguments[2]);
-						switch(protocolNbr){
-						case com::Protocol::COM_DELETE_ART:
-							int grpID = atoi(grp);
-							int artID = atoi(art);
-							deleteArt(grpID, artID);
-							break;
-						case com::Protocol::COM_GET_ART:
-							getArt(grpID, artID);
+						case Protocol::COM_LIST_NG:
+							listNg(msgHandler);
 							break;
 						default:
-							throw com::IllegalCommandException;
-						}
-						break;
-						case '4':
-							switch(protocolNbr){
-							case com::Protocol::COM_CREATE_ART:
-								const char* id = arguments[1];
-								int artID = atoi(id);
-								createArt(artID, arguments[2],arguments[3],arguments[4]);
-								break;
-							default:
-								throw com::IllegalCommandException;
-							}
+							throw IllegalCommandException;
 							break;
-							default:
-								throw com::IllegalCommandException;
+					}
+					break;
+				case '2':
+					string string_param = arguments.at(1);
+					switch(protocolNbr) {
+						case Protocol::COM_CREATE_NG:
+							createNg(msgHandler, string_param);
+							break;
+						case Protocol::COM_DELETE_NG:
+							deleteNg(msgHandler, string_param);
+							break;
+						case Protocol::COM_LIST_ART:
+							listArt(msgHandler, string_param);
+							break;
+						default:
+							throw IllegalCommandException;
+							break;
+					}
+					break;
+				case '3':
+					const char* grp = (arguments[1]);
+					const char* art = (arguments[2]);
+					switch(protocolNbr) {
+						case Protocol::COM_DELETE_ART:
+							int grpID = atoi(grp);
+							int artID = atoi(art);
+							deleteArt(msgHandler, grpID, artID);
+							break;
+						case Protocol::COM_GET_ART:
+							getArt(msgHandler, grpID, artID);
+							break;
+						default:
+							throw IllegalCommandException;
+							break;
+					}
+					break;
+				case '4':
+					switch(protocolNbr) {
+						case Protocol::COM_CREATE_ART:
+							const char* id = arguments[1];
+							int artID = atoi(id);
+							createArt(msgHandler, artID, arguments[2],arguments[3],arguments[4]);
+							break;
+						default:
+							throw IllegalCommandException;
+							break;
+					}
+					break;
+				default:
+					throw IllegalCommandException;
+					break;
+				}
 			}
 		}
 	}
-}
 
-void CommandHandler::listNg() throw(com::IllegalCommandException, com::ConnectionClosedException){
-	messageHandler.sendCode(com::Protocol::COM_LIST_NG);
-	messageHandler.sendCode(com::Protocol::COM_END);
+	void CommandHandler::listNg(MessageHandler& msgHandler) throw(IllegalCommandException, ConnectionClosedException) {
+		msgHandler.sendCode(Protocol::COM_LIST_NG);
+		msgHandler.sendCode(Protocol::COM_END);
+	}
 
-}
-void CommandHandler::createNg(std::string string_param) throw(com::IllegalCommandException, com::ConnectionClosedException){
-	messageHandler.sendCode(com::Protocol::COM_CREATE_NG);
-	messageHandler.sendStringParameter(string_param);
-	messageHandler.sendCode(com::Protocol::COM_END);
-}
-void CommandHandler::deleteNg(std::string string_param) throw(com::IllegalCommandException, com::ConnectionClosedException){
-	messageHandler.sendCode(com::Protocol::COM_DELETE_NG);
-	messageHandler.sendStringParameter(string_param);
-	messageHandler.sendCode(com::Protocol::COM_END);
-}
-void CommandHandler::listArt(std::string string_param) throw(com::IllegalCommandException, com::ConnectionClosedException){
-	messageHandler.sendCode(com::Protocol::COM_LIST_ART);
-	messageHandler.sendStringParameter(string_param);
-	messageHandler.sendCode(com::Protocol::COM_END);
-}
-void CommandHandler::createArt(int artID , std::string artTitle, std::string artAuthor, std::string artText) throw(com::IllegalCommandException, com::ConnectionClosedException){
-	messageHandler.sendCode(com::Protocol::COM_CREATE_ART);
-	messageHandler.sendIntParameter(artID);
-	messageHandler.sendStringParameter(artTitle);
-	messageHandler.sendStringParameter(artAuthor);
-	messageHandler.sendStringParameter(artText);
-	messageHandler.sendCode(com::Protocol::COM_END);
-}
-void CommandHandler::deleteArt(int groupID, int articleID) throw(com::IllegalCommandException, com::ConnectionClosedException){
-	messageHandler.sendCode(com::Protocol::COM_DELETE_ART);
-	messageHandler.sendIntParameter(groupID);
-	messageHandler.sendIntParameter(articleID);
-	messageHandler.sendCode(com::Protocol::COM_END);
-}
-void CommandHandler::getArt(int groupID, int articleID) throw(com::IllegalCommandException, com::ConnectionClosedException){
-	messageHandler.sendCode(com::Protocol::COM_GET_ART);
-	messageHandler.sendIntParameter(groupID);
-	messageHandler.sendIntParameter(articleID);
-	messageHandler.sendCode(com::Protocol::COM_END);
-}
+	void CommandHandler::createNg(MessageHandler& msgHandler, string& string_param) throw(IllegalCommandException, ConnectionClosedException) {
+		msgHandler.sendCode(Protocol::COM_CREATE_NG);
+		msgHandler.sendStringParameter(string_param);
+		msgHandler.sendCode(Protocol::COM_END);
+	}
 
+	void CommandHandler::deleteNg(MessageHandler& msgHandler, string& string_param) throw(IllegalCommandException, ConnectionClosedException) {
+		msgHandler.sendCode(Protocol::COM_DELETE_NG);
+		msgHandler.sendStringParameter(string_param);
+		msgHandler.sendCode(Protocol::COM_END);
+	}
 
-} /* namespace client */
+	void CommandHandler::listArt(MessageHandler& msgHandler, string& string_param) throw(IllegalCommandException, ConnectionClosedException) {
+		msgHandler.sendCode(Protocol::COM_LIST_ART);
+		msgHandler.sendStringParameter(string_param);
+		msgHandler.sendCode(Protocol::COM_END);
+	}
+
+	void CommandHandler::createArt(MessageHandler& msgHandler, int artID , string& artTitle, string& artAuthor, string& artText) throw(IllegalCommandException, ConnectionClosedException) {
+		msgHandler.sendCode(Protocol::COM_CREATE_ART);
+		msgHandler.sendIntParameter(artID);
+		msgHandler.sendStringParameter(artTitle);
+		msgHandler.sendStringParameter(artAuthor);
+		msgHandler.sendStringParameter(artText);
+		msgHandler.sendCode(Protocol::COM_END);
+	}
+
+	void CommandHandler::deleteArt(MessageHandler& msgHandler, int groupID, int articleID) throw(IllegalCommandException, ConnectionClosedException) {
+		msgHandler.sendCode(Protocol::COM_DELETE_ART);
+		msgHandler.sendIntParameter(groupID);
+		msgHandler.sendIntParameter(articleID);
+		msgHandler.sendCode(Protocol::COM_END);
+	}
+
+	void CommandHandler::getArt(MessageHandler& msgHandler, int groupID, int articleID) throw(IllegalCommandException, ConnectionClosedException) {
+		msgHandler.sendCode(Protocol::COM_GET_ART);
+		msgHandler.sendIntParameter(groupID);
+		msgHandler.sendIntParameter(articleID);
+		msgHandler.sendCode(Protocol::COM_END);
+	}
+}

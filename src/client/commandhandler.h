@@ -1,12 +1,6 @@
-/*
- * CommandHandler.h
- *
- *  Created on: Apr 5, 2013
- *      Author: fladnag
- */
+#ifndef COMMANDHANDLER_H
+#define COMMANDHANDLER_H
 
-#ifndef COMMANDHANDLER_H_
-#define COMMANDHANDLER_H_
 #include "../com/messagehandler.h"
 #include "../com/protocol.h"
 #include <iostream>
@@ -18,22 +12,18 @@
 
 namespace client {
 
-class CommandHandler {
-public:
-	CommandHandler(com::MessageHandler& mh); //constructor
-	virtual ~CommandHandler();
-            void interpretAndPerformCmd(std::string cmdLine, const std::map<std::string, com::Protocol>& mymap) throw(com::IllegalCommandException, com::ConnectionClosedException);
-private:
-            void listNg() throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void createNg(std::string string_param) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void deleteNg(std::string string_param) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void listArt(std::string string_param) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void createArt(int artID , std::string artTitle, std::string artAuthor, std::string artText) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void deleteArt(int groupID, int articleID) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void getArt(int groupID, int articleID) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            com::MessageHandler messageHandler;
+    class CommandHandler {
+    public:
+    	CommandHandler(){}
+        void interpretAndPerformCmd(com::MessageHandler& msgHandler, std::string& cmdLine, const std::map<std::string, com::Protocol>& mymap) throw(com::IllegalCommandException, com::ConnectionClosedException);
+    private:
+        void listNg(com::MessageHandler& msgHandler) throw(com::IllegalCommandException, com::ConnectionClosedException);
+        void createNg(com::MessageHandler& msgHandler, std::string string_param) throw(com::IllegalCommandException, com::ConnectionClosedException);
+        void deleteNg(com::MessageHandler& msgHandler, std::string string_param) throw(com::IllegalCommandException, com::ConnectionClosedException);
+        void listArt(com::MessageHandler& msgHandler, std::string string_param) throw(com::IllegalCommandException, com::ConnectionClosedException);
+        void createArt(com::MessageHandler& msgHandler, int artID , std::string artTitle, std::string artAuthor, std::string artText) throw(com::IllegalCommandException, com::ConnectionClosedException);
+        void deleteArt(com::MessageHandler& msgHandler, int groupID, int articleID) throw(com::IllegalCommandException, com::ConnectionClosedException);
+        void getArt(com::MessageHandler& msgHandler, int groupID, int articleID) throw(com::IllegalCommandException, com::ConnectionClosedException);
     };
-
-
-} /* End of name space client */
-#endif /* COMMANDHANDLER_H_ */
+}
+#endif
