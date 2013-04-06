@@ -25,8 +25,8 @@ namespace database {
             Newsgroup ng(ngName);
             db.insert(make_pair(lastNgId, ng));
             return Protocol::ANS_ACK;
-       }
-       return Protocol::ERR_NG_ALREADY_EXISTS;
+        }
+        return Protocol::ERR_NG_ALREADY_EXISTS;
     }
 
     map<size_t, Newsgroup> InMemoryDatabase::listNewsgroups() const  {
@@ -38,8 +38,8 @@ namespace database {
     }
 
     unsigned int InMemoryDatabase::createArticle(size_t ngId, const string& title, const string& author, const string& text) {
-       map<size_t, Newsgroup>::iterator it = db.find(ngId);
-       if(it == db.end()) return Protocol::ERR_NG_DOES_NOT_EXIST;
+        map<size_t, Newsgroup>::iterator it = db.find(ngId);
+        if(it == db.end()) return Protocol::ERR_NG_DOES_NOT_EXIST;
         it->second.addArticle(title, author, text);
         return Protocol::ANS_ACK;
     }
