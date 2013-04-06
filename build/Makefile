@@ -35,8 +35,10 @@ install: clean all
 clean: 
 	$(RM) libclientserver.a server
 
-cleaner: clean
+cleaner: clean untinstall
 	$(RM) $(SRCPATH)/**/*.o
+
+uninstall: 
 	rm -r bin
 	rm -r lib
 
