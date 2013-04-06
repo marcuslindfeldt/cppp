@@ -10,9 +10,7 @@ namespace database {
     class Newsgroup {
         public:
         	Newsgroup(const std::string& n) : name(n) {}
-        	~Newsgroup() {
-        		articles.clear();
-        	}
+        	~Newsgroup() { articles.clear(); }
         	const std::string& getName() const { return name; }
         	std::map<size_t, Article> getArticles() const { return articles; }
         	void addArticle(const std::string& ti, const std::string& a, const std::string& te);

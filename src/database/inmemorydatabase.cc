@@ -1,12 +1,9 @@
-#include <map>
-#include <vector>
-#include <utility>
-#include <string>
-#include <algorithm>
 #include "inmemorydatabase.h"
 #include "article.h"
 #include "newsgroup.h"
 #include "../com/protocol.h"
+#include <utility>
+#include <algorithm>
 
 using namespace std;
 using namespace com;

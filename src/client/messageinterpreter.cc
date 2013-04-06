@@ -1,8 +1,6 @@
 #include "messageinterpreter.h"
 #include "../com/protocol.h"
-#include "../com/messagehandler.h"
 #include <string>
-#include <iostream>
 
 using namespace com;
 using namespace std;

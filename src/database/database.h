@@ -1,7 +1,8 @@
 #ifndef DATABASE_H
 #define DATABASE_H
+
+#include <map>
 #include <string>
-#include <vector>
 #include "article.h"
 #include "newsgroup.h"
 
@@ -23,8 +24,6 @@
             virtual unsigned int createNewsgroup(const std::string& name) = 0;
             virtual std::map<size_t, Article> listArticles(size_t ngId) const throw(NgNotFoundException) = 0;
             virtual std::map<size_t, Newsgroup> listNewsgroups() const = 0;
-
     };
  }
-
 #endif

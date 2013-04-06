@@ -1,7 +1,5 @@
 #include "article.h"
 #include "newsgroup.h"
-#include <string>
-#include <map>
 #include <utility>
 #include <algorithm>
 
