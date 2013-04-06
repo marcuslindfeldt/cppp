@@ -14,6 +14,7 @@
 #include <sstream>
 #include <algorithm>
 #include <iterator>
+#include <map>
 
 namespace client {
 
@@ -21,7 +22,7 @@ class CommandHandler {
 public:
 	CommandHandler(com::MessageHandler& mh); //constructor
 	virtual ~CommandHandler();
-            void interpretAndPerformCmd(std::string cmdLine) throw(com::IllegalCommandException, com::ConnectionClosedException);
+            void interpretAndPerformCmd(std::string cmdLine, const std::map<std::string, com::Protocol>& mymap) throw(com::IllegalCommandException, com::ConnectionClosedException);
 private:
             void listNg() throw(com::IllegalCommandException, com::ConnectionClosedException);
             void createNg(std::string string_param) throw(com::IllegalCommandException, com::ConnectionClosedException);
