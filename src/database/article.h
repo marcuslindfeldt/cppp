@@ -24,7 +24,7 @@ namespace database {
         	std::string title, author, text;
     };
 
-    std::istream& operator>>(std::istream& in, Article& art) {
+   /* std::istream& operator>>(std::istream& in, Article& art) {
         getline(in, art.title);
         getline(in, art.author);
         in >> noskipws;
@@ -34,6 +34,6 @@ namespace database {
 
     std::ostream& operator<<(std::ostream& out, const Article& art) {
         return out << art.title << endl << art.author << endl << art.text << endl;
-    }
+    }*/
 }
 #endif

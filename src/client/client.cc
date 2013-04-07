@@ -1,9 +1,10 @@
 /** client.cc **/
-#include "../src/com/connection.h"
-#include "../src/com/connectionclosedexception.h"
-#include "../src/client/commandhandler.h"
-#include "../src/com/messagehandler.h"
-#include "../src/com/protocol.h"
+#include "../com/protocol.h"
+#include "../com/connection.h"
+#include "../com/connectionclosedexception.h"
+#include "../client/commandhandler.h"
+#include "../com/messagehandler.h"
+#include "../com/protocol.h"
 
 #include <iostream>
 #include <string>
@@ -21,7 +22,7 @@ using com::ConnectionClosedException;
 template <typename T>
 struct input_t
   {
-  mutable T& n;
+  /*mutable*/ T& n;
   explicit input_t( T& n ): n( n ) { }
   input_t( const input_t <T> & i ): n( i.n ) { }
   };
@@ -61,7 +62,7 @@ istream& operator >> ( istream& ins, const input_t <T> & i )
  */
 
 struct StringHelper{
-	StringHelper();
+
 	void initialHelp(){
 		cout << "What do you want to do: (enter the corresponding number, then hit enter)\n"
 				"1. List newsgroups\n"
@@ -119,7 +120,8 @@ int main(int argc, char* argv[]) {
         exit(1);
     }
     //Changing of command-interface can be done from client.
-    std::map< std::string, com::Protocol > mymap;
+    std::map< std::string, int > mymap;
+    /*
     mymap["listNewsGroup"] = com::Protocol::COM_LIST_NG;
     mymap["createNewsGroup"] = com::Protocol::COM_CREATE_NG;
     mymap["deleteNewsGroup"] = com::Protocol::COM_DELETE_NG;
@@ -127,14 +129,14 @@ int main(int argc, char* argv[]) {
     mymap["createArticle"] = com::Protocol::COM_CREATE_ART;
     mymap["deleteArticle"] = com::Protocol::COM_DELETE_ART;
     mymap["getArticle"] = com::Protocol::COM_GET_ART;
-
+*/
     Connection connection(argv[1], atoi(argv[2]));
     if (! connection.isConnected()) {
         cerr << "Connection attempt failed" << endl;
         exit(1);
     }
     com::MessageHandler messageHandler(connection);
-    client::CommandHandler commandHandler(messageHandler);
+    client::CommandHandler commandHandler;
     StringHelper help;
 
     while(1){
@@ -147,6 +149,6 @@ int main(int argc, char* argv[]) {
         cout << "Please, enter only an valid string.> " << flush;
         cin >> input(tmp);
         }
-      commandHandler.interpretAndPerformCmd(tmp, mymap);
+      commandHandler.interpretAndPerformCmd(messageHandler, tmp, mymap);
     }
 }
