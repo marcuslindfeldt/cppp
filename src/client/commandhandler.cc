@@ -7,18 +7,23 @@ namespace client {
 
 	//TODO Sync this with the responses from the server side implementation
 
-	void CommandHandler::interpretAndPerformCmd(MessageHandler& msgHandler, string& theCmdLine, const map<string, int>& mymap) throw(IllegalCommandException, ConnectionClosedException){
+void CommandHandler::interpretAndPerformCmd(com::MessageHandler& msgHandler, std::string& cmdLine, const std::map<std::string, int>& mymap, const char& delim) throw(com::IllegalCommandException, com::ConnectionClosedException){
 		/*
 		 * This is being implemented with the notion of client commands being issued as:
 		 * "commandtype arg1 arg2 arg3 ..argN"
 		 */
 
 
-		istringstream inputSS(theCmdLine);
+		stringstream inputSS(cmdLine);
+		string subStr;
+		while (getline(inputSS, subStr, delim)) {
+		        arguments.push_back(subStr);
+		    }
+		/*
 		copy(istream_iterator<string>(inputSS),
 				istream_iterator<string>(),
 				back_inserter<vector<string> >(arguments));
-
+				*/
 		if(arguments.size() > 0) {
 			map<string, int>::const_iterator it = mymap.find(arguments.at(0));
 			if(it != mymap.end()){

@@ -16,7 +16,7 @@ namespace client {
     class CommandHandler {
     public:
     	CommandHandler(){}
-        void interpretAndPerformCmd(com::MessageHandler& msgHandler, std::string& cmdLine, const std::map<std::string, int>& mymap) throw(com::IllegalCommandException, com::ConnectionClosedException);
+    	void interpretAndPerformCmd(com::MessageHandler& msgHandler, std::string& cmdLine, const std::map<std::string, int>& mymap, const char& delim) throw(com::IllegalCommandException, com::ConnectionClosedException);
     private:
         void listNg(com::MessageHandler& msgHandler) throw(com::IllegalCommandException, com::ConnectionClosedException);
         void createNg(com::MessageHandler& msgHandler, std::string& string_param) throw(com::IllegalCommandException, com::ConnectionClosedException);
