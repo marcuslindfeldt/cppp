@@ -29,8 +29,9 @@ install: clean all
 	mkdir bin
 	mkdir lib
 	mv server bin
-	#cp client bin
+	mv client bin
 	mv libclientserver.a lib
+	mv $(SRCPATH)/**/*.o lib
 
 clean: 
 	$(RM) libclientserver.a server

@@ -1,9 +1,9 @@
 /** client.cc **/
-#include "../src/com/connection.h"
-#include "../src/com/connectionclosedexception.h"
-#include "../src/client/commandhandler.h"
-#include "../src/com/messagehandler.h"
-#include "../src/com/protocol.h"
+#include "../com/connection.h"
+#include "../com/connectionclosedexception.h"
+#include "commandhandler.h"
+#include "../com/messagehandler.h"
+#include "../com/protocol.h"
 
 #include <iostream>
 #include <string>
@@ -13,6 +13,7 @@
 using namespace std;
 using com::Connection;
 using com::ConnectionClosedException;
+using com::Protocol;
 
 /**
  * Input formatting helper functions.
