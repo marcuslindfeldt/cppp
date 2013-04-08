@@ -9,15 +9,15 @@ namespace client {
     class MessageInterpreter {
         public:
             MessageInterpreter(){}
-            void interpretAnsAndBuildRes(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
+            std::ostream& interpretAnsAndBuildRes(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
         private:
-            void listNg(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void createNg(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void deleteNg(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void listArt(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void createArt(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void deleteArt(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void getArt(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
+            std::ostream& listNg(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
+            std::ostream& createNg(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
+            std::ostream& deleteNg(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
+            std::ostream& listArt(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
+            std::ostream& createArt(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
+            std::ostream& deleteArt(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
+            std::ostream& getArt(com::MessageHandler& mh, std::ostream& out) throw(com::IllegalCommandException, com::ConnectionClosedException);
     };
 }
 #endif

@@ -13,7 +13,6 @@ void CommandHandler::interpretAndPerformCmd(com::MessageHandler& msgHandler, std
 		 * "commandtype arg1 arg2 arg3 ..argN"
 		 */
 
-
 		stringstream inputSS(cmdLine);
 		string subStr;
 		while (getline(inputSS, subStr, delim)) {
@@ -41,7 +40,7 @@ void CommandHandler::interpretAndPerformCmd(com::MessageHandler& msgHandler, std
 							listNg(msgHandler);
 							break;
 						default:
-							//throw IllegalCommandException;
+							throw IllegalCommandException();
 							break;
 					}
 					break;
@@ -58,7 +57,7 @@ void CommandHandler::interpretAndPerformCmd(com::MessageHandler& msgHandler, std
 							listArt(msgHandler, stringParam);
 							break;
 						default:
-							//throw IllegalCommandException;
+							throw IllegalCommandException();
 							break;
 					}
 					break;
@@ -75,11 +74,11 @@ void CommandHandler::interpretAndPerformCmd(com::MessageHandler& msgHandler, std
 						getArt(msgHandler, grpID, artID);
 						break;
 					default:
-						//throw IllegalCommandException;
+						throw IllegalCommandException();
 							break;
 					}
 					break;
-				case 4:
+				case 5:
 					switch(protocolNbr) {
 						case Protocol::COM_CREATE_ART:
 							id = arguments[1].c_str();
@@ -87,12 +86,12 @@ void CommandHandler::interpretAndPerformCmd(com::MessageHandler& msgHandler, std
 							createArt(msgHandler, artID, arguments[2],arguments[3],arguments[4]);
 							break;
 						default:
-							//throw IllegalCommandException;
+							throw IllegalCommandException();
 							break;
 					}
 					break;
 				default:
-					//throw IllegalCommandException;
+					throw IllegalCommandException();
 					break;
 				}
 				arguments.erase(arguments.begin(), arguments.end());
