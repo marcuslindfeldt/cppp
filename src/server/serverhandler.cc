@@ -13,8 +13,10 @@ using namespace database;
 using namespace std;
 
 int main (int argc, char** argv){
+
+	cout << argc;
     if(argc != 2) {
-        cerr << "No arguments provided " << endl;
+        cerr << "Wrong arguments provided, usage: myserver port-number " << endl;
         exit(1);
     }
     Server server(atoi(argv[1]));
@@ -24,9 +26,9 @@ int main (int argc, char** argv){
     }
     Database* db = new InMemoryDatabase();
     cout << "Server running at port: " << argv[1] << endl;
-    while(true) {
+    while(true){
         Connection* conn = server.waitForActivity();
-        MessageHandler mh (*conn);
+        MessageHandler mh (conn);
         MessageInterpreter mi;
         try {
             if(conn != 0) {

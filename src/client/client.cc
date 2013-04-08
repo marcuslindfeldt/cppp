@@ -129,10 +129,10 @@ int main(int argc, char* argv[]) {
 	 */
 	char delim = '-';
 	com::Connection connection(argv[1], atoi(argv[2]));
-	/*if (! connection.isConnected()) {
+	if (! connection.isConnected()) {
         cerr << "Connection attempt failed" << endl;
         exit(1);
-    }*/
+    }
 	com::Connection* connect = &connection;
 	com::MessageHandler messageHandler(connect);
 	client::CommandHandler commandHandler;
