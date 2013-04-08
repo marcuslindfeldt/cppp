@@ -8,7 +8,7 @@ namespace com {
 	* send number ranging from 0-255
 	*/
 	void MessageHandler::sendByte(int byte) const throw(ConnectionClosedException) {
-		conn->write(static_cast<unsigned char>(byte));
+		conn.write(static_cast<unsigned char>(byte));
 	}
 
 	/**
@@ -50,14 +50,14 @@ namespace com {
 	}
 
 	int MessageHandler::recvCode() const throw(ConnectionClosedException) {
-		return conn->read();
+		return conn.read();
 	}
 
 	int MessageHandler::recvInt() const throw(ConnectionClosedException) {
-		unsigned char b1 = conn->read();
-		unsigned char b2 = conn->read();
-		unsigned char b3 = conn->read();
-		unsigned char b4 = conn->read();
+		unsigned char b1 = conn.read();
+		unsigned char b2 = conn.read();
+		unsigned char b3 = conn.read();
+		unsigned char b4 = conn.read();
 
 		return (b1 << 24) | (b2 << 16) | (b3 << 8) | b4;
 	}
@@ -82,7 +82,7 @@ namespace com {
 		std::string res;
 
 		for(int i = 0; i < n; i++){
-			res.push_back(conn->read());
+			res.push_back(conn.read());
 		}
 		return res;
 	}
