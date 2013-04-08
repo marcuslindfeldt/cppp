@@ -33,7 +33,7 @@ install: clean all
 	mv $(SRCPATH)/**/*.o lib
 
 clean: 
-	$(RM) libclientserver.a server
+	$(RM) libclientserver.a server client
 
 cleaner: clean untinstall
 	$(RM) $(SRCPATH)/**/*.o
