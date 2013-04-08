@@ -13,7 +13,6 @@ using namespace database;
 using namespace std;
 
 int main (int argc, char** argv){
-
     if(argc != 2) {
         cerr << "No arguments provided " << endl;
         exit(1);

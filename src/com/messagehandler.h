@@ -9,7 +9,7 @@ namespace com {
 
 	class MessageHandler {
 	public:
-		MessageHandler(Connection& c) : conn(c) {};
+		MessageHandler(Connection* c) : conn(c) {};
 		void sendCode(int) throw(ConnectionClosedException);
 		void sendInt(int) throw(ConnectionClosedException);
 		void sendIntParameter(int) throw(ConnectionClosedException);
@@ -20,7 +20,7 @@ namespace com {
 		const std::string recvStringParameter() throw(IllegalCommandException, ConnectionClosedException);
 	private:
 		void sendByte(int) const throw(ConnectionClosedException);
-		Connection conn;
+		Connection* conn;
 	};
 }
 #endif

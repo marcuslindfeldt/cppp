@@ -128,12 +128,13 @@ int main(int argc, char* argv[]) {
     mymap["getArticle"] = com::Protocol::COM_GET_ART;
 	 */
 	char delim = '-';
-	Connection connection(argv[1], atoi(argv[2]));
+	com::Connection connection(argv[1], atoi(argv[2]));
 	/*if (! connection.isConnected()) {
         cerr << "Connection attempt failed" << endl;
         exit(1);
     }*/
-	com::MessageHandler messageHandler(connection);
+	com::Connection* connect = &connection;
+	com::MessageHandler messageHandler(connect);
 	client::CommandHandler commandHandler;
 	StringHelper help;
 
