@@ -4,6 +4,7 @@
 #include "../com/connectionclosedexception.h"
 #include "../client/commandhandler.h"
 #include "../com/messagehandler.h"
+#include "../client/messageinterpreter.h"
 #include "../com/protocol.h"
 
 #include <iostream>
@@ -61,7 +62,7 @@ istream& operator >> ( istream& ins, const input_t <T> & input )
 
 struct StringHelper{
 	void initialHelp(char delim){
-		cout << "What do you want to do: (enter the corresponding number, then hit enter)\n"
+		cout << "\n\n\nWhat do you want to do: (enter the corresponding number, then hit enter)\n"
 				"1. List newsgroups\n"
 				"2. Create a new newsgroup?\n"
 				"3. Delete a newsgroup\n"
@@ -81,31 +82,31 @@ struct StringHelper{
 		cout << "Input is of the form: \n";
 		switch(tmp){
 		case com::Protocol::COM_LIST_NG:
-			cout << """listNewsGroup""";
+			cout << """listNewsGroup""" << endl;;
 			break;
 		case com::Protocol::COM_CREATE_NG:
-			cout << """createNewsGroup""" << delim << "name";
+			cout << """createNewsGroup""" << delim << "name" << endl;
 			break;
 		case com::Protocol::COM_DELETE_NG:
-			cout << """deleteNewsGroup""" << delim << "name";
+			cout << """deleteNewsGroup""" << delim << "name" << endl;
 			break;
 		case com::Protocol::COM_LIST_ART:
-			cout << """listArticle""" << delim << "name";
+			cout << """listArticle""" << delim << "name" << endl;
 			break;
 		case com::Protocol::COM_CREATE_ART:
-			cout << """createArticle""" << delim << "ArtIDnbr" << delim << "title" << delim << "author" << delim << "text";
+			cout << """createArticle""" << delim << "ArtIDnbr" << delim << "title" << delim << "author" << delim << "text" << endl;
 			break;
 		case com::Protocol::COM_DELETE_ART:
-			cout << """deleteArticle""" << delim << "groupIDnbr" << delim << "ArtIDNbr";
+			cout << """deleteArticle""" << delim << "groupIDnbr" << delim << "ArtIDNbr" << endl;
 			break;
 		case com::Protocol::COM_GET_ART:
-			cout << """getArticle""" << delim << "groupIDnbr" << delim << "ArtIDNbr";
+			cout << """getArticle""" << delim << "groupIDnbr" << delim << "ArtIDNbr" << endl;
 			break;
 		default:
 			throw com::IllegalCommandException();
 			break;
 		}
-		cout << endl;
+		cout << endl << endl;
 
 	}
 };
@@ -113,7 +114,7 @@ struct StringHelper{
 
 int main(int argc, char* argv[]) {
 	if (argc != 3) {
-		cerr << "Input must be: client-host-name and  port-number" << endl;
+		cerr << "Input must be: client-host-name and  port-number\n" << endl;
 		exit(1);
 	}
 	//Changing of command-interface can be done from client.
@@ -135,6 +136,7 @@ int main(int argc, char* argv[]) {
     }
 	com::Connection* connect = &connection;
 	com::MessageHandler messageHandler(connect);
+	client::MessageInterpreter msginterp;
 	client::CommandHandler commandHandler;
 	StringHelper help;
 
@@ -146,10 +148,11 @@ int main(int argc, char* argv[]) {
 			while (!cin)
 			{
 				cin.clear();
-				cout << "Please, enter only an valid string.> " << flush;
+				cout << "Please, enter only an valid string.\n> " << flush;
 				cin >> input(tmp);
 			}
 			commandHandler.interpretAndPerformCmd(messageHandler, tmp, mymap, delim);
+			msginterp.interpretAnsAndBuildRes(messageHandler, std::cout);
 		} catch(com::IllegalCommandException&){
 			cout << "That was an illegal command!" << endl;
 		}

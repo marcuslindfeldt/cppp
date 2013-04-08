@@ -17,7 +17,6 @@ void CommandHandler::interpretAndPerformCmd(com::MessageHandler& msgHandler, std
 		stringstream inputSS(cmdLine);
 		string subStr;
 		while (getline(inputSS, subStr, delim)) {
-				cout << subStr;
 		        arguments.push_back(subStr);
 		    }
 		/*
