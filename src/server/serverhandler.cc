@@ -26,7 +26,7 @@ int main (int argc, char** argv){
     cout << "Server running at port: " << argv[1] << endl;
     while(true) {
         Connection* conn = server.waitForActivity();
-        MessageHandler mh (conn);
+        MessageHandler mh (*conn);
         MessageInterpreter mi;
         try {
             if(conn != 0) {

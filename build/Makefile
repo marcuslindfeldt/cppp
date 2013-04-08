@@ -30,12 +30,12 @@ install: clean all
 	mv server bin
 	mv client bin
 	mv libclientserver.a lib
-	mv $(SRCPATH)/**/*.o lib
+	#mv $(SRCPATH)/**/*.o lib
 
 clean: 
 	$(RM) libclientserver.a server client
 
-cleaner: clean untinstall
+cleaner: clean uninstall
 	$(RM) $(SRCPATH)/**/*.o
 
 uninstall: 
