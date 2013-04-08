@@ -16,6 +16,9 @@ namespace client {
     class CommandHandler {
     public:
     	CommandHandler(){}
+    	/*
+    	 * Interpret a string received from the client and parse it, then send the request to the server through one of the functions below.
+    	 */
     	void interpretAndPerformCmd(com::MessageHandler& msgHandler, std::string& cmdLine, const std::map<std::string, int>& mymap, const char& delim) throw(com::IllegalCommandException, com::ConnectionClosedException);
     private:
         void listNg(com::MessageHandler& msgHandler) throw(com::IllegalCommandException, com::ConnectionClosedException);

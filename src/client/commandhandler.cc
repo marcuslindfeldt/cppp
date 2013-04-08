@@ -17,6 +17,7 @@ void CommandHandler::interpretAndPerformCmd(com::MessageHandler& msgHandler, std
 		stringstream inputSS(cmdLine);
 		string subStr;
 		while (getline(inputSS, subStr, delim)) {
+				cout << subStr;
 		        arguments.push_back(subStr);
 		    }
 		/*
@@ -35,7 +36,7 @@ void CommandHandler::interpretAndPerformCmd(com::MessageHandler& msgHandler, std
 				int grpID;
 				int artID;
 				switch(arguments.size()){
-				case '1':
+				case 1:
 					switch(protocolNbr){
 						case Protocol::COM_LIST_NG:
 							listNg(msgHandler);
@@ -45,7 +46,7 @@ void CommandHandler::interpretAndPerformCmd(com::MessageHandler& msgHandler, std
 							break;
 					}
 					break;
-				case '2':
+				case 2:
 					 stringParam = arguments.at(1);
 					switch(protocolNbr) {
 						case Protocol::COM_CREATE_NG:
@@ -62,7 +63,7 @@ void CommandHandler::interpretAndPerformCmd(com::MessageHandler& msgHandler, std
 							break;
 					}
 					break;
-				case '3':
+				case 3:
 					grp = (arguments[1]).c_str();
 					art = (arguments[2]).c_str();
 					grpID = atoi(grp);
@@ -79,7 +80,7 @@ void CommandHandler::interpretAndPerformCmd(com::MessageHandler& msgHandler, std
 							break;
 					}
 					break;
-				case '4':
+				case 4:
 					switch(protocolNbr) {
 						case Protocol::COM_CREATE_ART:
 							id = arguments[1].c_str();
@@ -95,6 +96,7 @@ void CommandHandler::interpretAndPerformCmd(com::MessageHandler& msgHandler, std
 					//throw IllegalCommandException;
 					break;
 				}
+				arguments.erase(arguments.begin(), arguments.end());
 			}
 		}
 	}

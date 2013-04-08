@@ -118,7 +118,7 @@ int main(int argc, char* argv[]) {
 	}
 	//Changing of command-interface can be done from client.
 	std::map< std::string, int > mymap;
-	/*
+
     mymap["listNewsGroup"] = com::Protocol::COM_LIST_NG;
     mymap["createNewsGroup"] = com::Protocol::COM_CREATE_NG;
     mymap["deleteNewsGroup"] = com::Protocol::COM_DELETE_NG;
@@ -126,7 +126,7 @@ int main(int argc, char* argv[]) {
     mymap["createArticle"] = com::Protocol::COM_CREATE_ART;
     mymap["deleteArticle"] = com::Protocol::COM_DELETE_ART;
     mymap["getArticle"] = com::Protocol::COM_GET_ART;
-	 */
+
 	char delim = '-';
 	com::Connection connection(argv[1], atoi(argv[2]));
 	if (! connection.isConnected()) {
@@ -149,7 +149,7 @@ int main(int argc, char* argv[]) {
 				cout << "Please, enter only an valid string.> " << flush;
 				cin >> input(tmp);
 			}
-			//commandHandler.interpretAndPerformCmd(messageHandler, tmp, mymap, delim);
+			commandHandler.interpretAndPerformCmd(messageHandler, tmp, mymap, delim);
 		} catch(com::IllegalCommandException&){
 			cout << "That was an illegal command!" << endl;
 		}
