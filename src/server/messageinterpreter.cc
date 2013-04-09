@@ -1,7 +1,5 @@
 #include "messageinterpreter.h"
 #include "../com/protocol.h"
-#include "../database/database.h"
-#include "../com/messagehandler.h"
 #include <string>
 #include <map>
 

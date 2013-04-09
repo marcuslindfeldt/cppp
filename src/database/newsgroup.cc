@@ -1,4 +1,3 @@
-#include "article.h"
 #include "newsgroup.h"
 #include <utility>
 #include <algorithm>

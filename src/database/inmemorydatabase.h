@@ -2,8 +2,6 @@
 #define INMEMDB_H
 
 #include "database.h"
-#include "article.h"
-#include "newsgroup.h"
 
 namespace database {
 

@@ -6,7 +6,6 @@
 #include <iostream>
 #include <iterator>
 #include <sstream>
-#include <string>
 
 namespace database {
 
@@ -27,13 +26,13 @@ namespace database {
     std::istream& operator>>(std::istream& in, Article& art) {
         getline(in, art.title);
         getline(in, art.author);
-        in >> noskipws;
-        art.text = string((istream_iterator<char>(in)), istream_iterator<char>());
+        in >> std::noskipws;
+        art.text = std::string((std::istream_iterator<char>(in)), std::istream_iterator<char>());
         return in;
     }
 
     std::ostream& operator<<(std::ostream& out, const Article& art) {
-        return out << art.title << endl << art.author << endl << art.text << endl;
+        return out << art.title << std::endl << art.author << std::endl << art.text << std::endl;
     }
 }
 #endif

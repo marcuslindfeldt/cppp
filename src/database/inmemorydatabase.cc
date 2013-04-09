@@ -1,6 +1,4 @@
 #include "inmemorydatabase.h"
-#include "article.h"
-#include "newsgroup.h"
 #include "../com/protocol.h"
 #include <utility>
 #include <algorithm>

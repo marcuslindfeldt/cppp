@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include "server.h"
 #include "../database/inmemorydatabase.h"
-#include "../database/database.h"
+
 #include "messageinterpreter.h"
 #include "../com/messagehandler.h"
 #include "../com/connection.h"
