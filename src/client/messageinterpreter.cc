@@ -41,7 +41,7 @@ ostream& MessageInterpreter::listNg(MessageHandler& msgHandler, ostream& out) th
 	int nbrRows = msgHandler.recvIntParameter();
 	if (nbrRows > 0) {
 		for(int i = 0; i < nbrRows; ++i) {
-			out << msgHandler.recvStringParameter() << "  " <<  msgHandler.recvIntParameter() << endl; // Important to follow the convention in messageHandler for dataflow!!
+			out <<  msgHandler.recvIntParameter() << ". " << msgHandler.recvStringParameter() << endl; // Important to follow the convention in messageHandler for dataflow!!
 		}
 	} else {
 		out << "No Newsgroups." << endl;
