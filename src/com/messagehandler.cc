@@ -1,5 +1,6 @@
 #include "messagehandler.h"
 #include "protocol.h"
+#include <iostream>
 
 namespace com {
 

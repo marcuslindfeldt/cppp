@@ -139,12 +139,16 @@ int main(int argc, char* argv[]) {
 	client::MessageInterpreter msginterp;
 	client::CommandHandler commandHandler;
 	StringHelper help;
-
+	cout << "Enter ""help"" for help on arguments" << endl;
 	while(1){
 		try{
-			help.initialHelp(delim); //Always display the helper or only when prompted...hmmm...?
+			cout << "What do you want to do?" << endl;
 			string tmp;
 			cin >> input(tmp);
+			if(cin && tmp == "help"){
+				help.initialHelp(delim); //Always display the helper or only when prompted...hmmm...?
+				cin >> input(tmp);
+			}
 			while (!cin)
 			{
 				cin.clear();

@@ -2,6 +2,7 @@
 #include "../com/protocol.h"
 #include <string>
 #include <map>
+#include <iostream>
 
 using namespace database;
 using namespace com;
@@ -57,8 +58,9 @@ namespace server {
         msgHandler.sendCode(Protocol::ANS_CREATE_NG);
         if(!database.createNewsgroup(name)) {
             msgHandler.sendCode(Protocol::ANS_NAK);
-        }
+        }else{
         msgHandler.sendCode(Protocol::ANS_ACK);
+        }
     }
 
     void MessageInterpreter::deleteNg(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
