@@ -4,8 +4,8 @@
 
 namespace com {
 
-	/** 
-	* private helper method 
+	/**
+	* private helper method
 	* send number ranging from 0-255
 	*/
 	void MessageHandler::sendByte(int byte) const throw(ConnectionClosedException) {

@@ -2,7 +2,6 @@
 #include "../com/protocol.h"
 #include <string>
 #include <map>
-#include <iostream>
 
 using namespace database;
 using namespace com;
@@ -58,8 +57,8 @@ namespace server {
         msgHandler.sendCode(Protocol::ANS_CREATE_NG);
         if(!database.createNewsgroup(name)) {
             msgHandler.sendCode(Protocol::ANS_NAK);
-        }else{
-        msgHandler.sendCode(Protocol::ANS_ACK);
+        } else {
+            msgHandler.sendCode(Protocol::ANS_ACK);
         }
     }
 
@@ -67,7 +66,7 @@ namespace server {
         int id = msgHandler.recvIntParameter();
         if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
         msgHandler.sendCode(Protocol::ANS_DELETE_NG);
-        msgHandler.sendCode(database.deleteNewsgroup(id) ? Protocol::ANS_ACK : Protocol::ANS_NAK); 
+        msgHandler.sendCode(database.deleteNewsgroup(id) ? Protocol::ANS_ACK : Protocol::ANS_NAK);
     }
 
     void MessageInterpreter::listArt(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
@@ -112,7 +111,7 @@ namespace server {
         } catch (ArtNotFoundException artE) {
             msgHandler.sendCode(Protocol::ANS_NAK);
             msgHandler.sendCode(Protocol::ERR_ART_DOES_NOT_EXIST);
-        }       
+        }
     }
 
     void MessageInterpreter::getArt(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {

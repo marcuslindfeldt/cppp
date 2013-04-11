@@ -6,6 +6,10 @@ using namespace std;
 
 namespace database {
 
+    InMemoryDatabase::InMemoryDatabase() {
+        lastNgId = 0;
+    }
+
     bool InMemoryDatabase::createNewsgroup(const string& ngName) {
 
         map<size_t, Newsgroup>::iterator it = db.begin();
@@ -49,6 +53,7 @@ namespace database {
     Article* InMemoryDatabase::getArticle(size_t ngId, size_t artId) throw(NgNotFoundException, ArtNotFoundException) {
         map<size_t, Newsgroup>::iterator it = db.find(ngId);
         if(it == db.end()) throw NgNotFoundException();
+
         Article* artP = it->second.getArticle(artId);
         if(artP == 0) throw ArtNotFoundException();
         return artP;

@@ -7,7 +7,7 @@ namespace database {
 
     class InMemoryDatabase : public Database {
         public:
-            InMemoryDatabase()  {}
+            InMemoryDatabase();
             Article* getArticle(size_t ngId, size_t artId) throw(NgNotFoundException, ArtNotFoundException);
             std::map<size_t, Article> listArticles(size_t ngId) const throw(NgNotFoundException);
             std::map<size_t, Newsgroup> listNewsgroups() const;
