@@ -41,10 +41,8 @@ namespace server {
     }
 
     void MessageInterpreter::listNg() throw(IllegalCommandException, ConnectionClosedException) {
-        cout << "hello there!" << endl;
         if(mh.recvCode() != Protocol::COM_END) throw IllegalCommandException();
         map<size_t, Newsgroup> ngs = db->listNewsgroups();
-        cout << "Size: " << to_string(ngs.size()) << endl;
         mh.sendCode(Protocol::ANS_LIST_NG);
         mh.sendIntParameter(ngs.size());
         for(map<size_t, Newsgroup>::iterator it = ngs.begin(); it != ngs.end(); ++it) {
