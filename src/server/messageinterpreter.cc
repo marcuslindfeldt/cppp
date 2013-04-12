@@ -9,128 +9,141 @@ using namespace std;
 
 namespace server {
 
-    void MessageInterpreter::interpretAndPerformCmd(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
-        int code = msgHandler.recvCode();
+    void MessageInterpreter::interpretAndPerformCmd() throw(IllegalCommandException, ConnectionClosedException) {
+        int code = mh.recvCode();
         switch(code){
             case Protocol::COM_LIST_NG:
-                listNg(msgHandler,database);
+                listNg();
                 break;
             case Protocol::COM_CREATE_NG:
-                createNg(msgHandler,database);
+                createNg();
                 break;
             case Protocol::COM_DELETE_NG:
-                deleteNg(msgHandler,database);
+                deleteNg();
                 break;
             case Protocol::COM_LIST_ART:
-                listArt(msgHandler,database);
+                listArt();
                 break;
             case Protocol::COM_CREATE_ART:
-                createArt(msgHandler,database);
+                createArt();
                 break;
             case Protocol::COM_DELETE_ART:
-                deleteArt(msgHandler,database);
+                deleteArt();
                 break;
             case Protocol::COM_GET_ART:
-                getArt(msgHandler,database);
+                getArt();
                 break;
             default:
                 throw IllegalCommandException();
                 break;
         }
-        msgHandler.sendCode(Protocol::ANS_END);
+        mh.sendCode(Protocol::ANS_END);
     }
 
-    void MessageInterpreter::listNg(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
-        if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
-        map<size_t, Newsgroup> ngs = database.listNewsgroups();
-        msgHandler.sendCode(Protocol::ANS_LIST_NG);
-        msgHandler.sendIntParameter(ngs.size());
+    void MessageInterpreter::listNg() throw(IllegalCommandException, ConnectionClosedException) {
+        cout << "hello there!" << endl;
+        if(mh.recvCode() != Protocol::COM_END) throw IllegalCommandException();
+        map<size_t, Newsgroup> ngs = db->listNewsgroups();
+        cout << "Size: " << to_string(ngs.size()) << endl;
+        mh.sendCode(Protocol::ANS_LIST_NG);
+        mh.sendIntParameter(ngs.size());
         for(map<size_t, Newsgroup>::iterator it = ngs.begin(); it != ngs.end(); ++it) {
-            msgHandler.sendIntParameter(it->first);
-            msgHandler.sendStringParameter(it->second.getName());
+            mh.sendIntParameter(it->first);
+            mh.sendStringParameter(it->second.getName());
         }
     }
 
-    void MessageInterpreter::createNg(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
-        string name = msgHandler.recvStringParameter();
-        if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
-        msgHandler.sendCode(Protocol::ANS_CREATE_NG);
-        if(!database.createNewsgroup(name)) {
-            msgHandler.sendCode(Protocol::ANS_NAK);
+    void MessageInterpreter::createNg() throw(IllegalCommandException, ConnectionClosedException) {
+        string name = mh.recvStringParameter();
+        if(mh.recvCode() != Protocol::COM_END) throw IllegalCommandException();
+        mh.sendCode(Protocol::ANS_CREATE_NG);
+        if(!db->createNewsgroup(name)) {
+            mh.sendCode(Protocol::ANS_NAK);
+            mh.sendCode(Protocol::ERR_NG_ALREADY_EXISTS);
         } else {
-            msgHandler.sendCode(Protocol::ANS_ACK);
+            mh.sendCode(Protocol::ANS_ACK);
         }
     }
 
-    void MessageInterpreter::deleteNg(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
-        int id = msgHandler.recvIntParameter();
-        if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
-        msgHandler.sendCode(Protocol::ANS_DELETE_NG);
-        msgHandler.sendCode(database.deleteNewsgroup(id) ? Protocol::ANS_ACK : Protocol::ANS_NAK);
+    void MessageInterpreter::deleteNg() throw(IllegalCommandException, ConnectionClosedException) {
+        int id = mh.recvIntParameter();
+        if(mh.recvCode() != Protocol::COM_END) throw IllegalCommandException();
+        mh.sendCode(Protocol::ANS_DELETE_NG);
+        if(!db->deleteNewsgroup(id)) {
+            mh.sendCode(Protocol::ANS_NAK);
+            mh.sendCode(Protocol::ERR_NG_DOES_NOT_EXIST);
+        } else {
+            mh.sendCode(Protocol::ANS_ACK);
+        }
     }
 
-    void MessageInterpreter::listArt(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
-        int id = msgHandler.recvIntParameter();
-        if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
-        msgHandler.sendCode(Protocol::ANS_LIST_ART);
+    void MessageInterpreter::listArt() throw(IllegalCommandException, ConnectionClosedException) {
+        int id = mh.recvIntParameter();
+        if(mh.recvCode() != Protocol::COM_END) throw IllegalCommandException();
+        mh.sendCode(Protocol::ANS_LIST_ART);
         try {
-            map<size_t, Article> arts = database.listArticles(id);
-            msgHandler.sendCode(Protocol::ANS_ACK);
-            msgHandler.sendIntParameter(arts.size());
+            map<size_t, Article> arts = db->listArticles(id);
+            mh.sendCode(Protocol::ANS_ACK);
+            mh.sendIntParameter(arts.size());
             for(map<size_t, Article>::iterator it = arts.begin(); it != arts.end(); ++it) {
-                msgHandler.sendIntParameter(it->first);
-                msgHandler.sendStringParameter(it->second.getTitle());
+                mh.sendIntParameter(it->first);
+                mh.sendStringParameter(it->second.getTitle());
             }
         } catch (NgNotFoundException e) {
-            msgHandler.sendCode(Protocol::ANS_NAK);
-            msgHandler.sendCode(Protocol::ERR_NG_DOES_NOT_EXIST);
+            mh.sendCode(Protocol::ANS_NAK);
+            mh.sendCode(Protocol::ERR_NG_DOES_NOT_EXIST);
         }
     }
 
-    void MessageInterpreter::createArt(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
-        int id = msgHandler.recvIntParameter();
-        string title = msgHandler.recvStringParameter();
-        string author = msgHandler.recvStringParameter();
-        string text = msgHandler.recvStringParameter();
-        if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
-        msgHandler.sendCode(Protocol::ANS_CREATE_ART);
-        msgHandler.sendCode(database.createArticle(id, title, author, text) ? Protocol::ANS_ACK : Protocol::ERR_NG_DOES_NOT_EXIST);
-    }
-
-    void MessageInterpreter::deleteArt(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
-        int ngId = msgHandler.recvIntParameter();
-        int artId = msgHandler.recvIntParameter();
-        if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
-        msgHandler.sendCode(Protocol::ANS_DELETE_ART);
-        try {
-            database.deleteArticle(ngId, artId);
-            msgHandler.sendCode(Protocol::ANS_ACK);
-        } catch (NgNotFoundException ngE) {
-            msgHandler.sendCode(Protocol::ANS_NAK);
-            msgHandler.sendCode(Protocol::ERR_NG_DOES_NOT_EXIST);
-        } catch (ArtNotFoundException artE) {
-            msgHandler.sendCode(Protocol::ANS_NAK);
-            msgHandler.sendCode(Protocol::ERR_ART_DOES_NOT_EXIST);
+    void MessageInterpreter::createArt() throw(IllegalCommandException, ConnectionClosedException) {
+        int id = mh.recvIntParameter();
+        string title = mh.recvStringParameter();
+        string author = mh.recvStringParameter();
+        string text = mh.recvStringParameter();
+        if(mh.recvCode() != Protocol::COM_END) throw IllegalCommandException();
+        mh.sendCode(Protocol::ANS_CREATE_ART);
+        if(!db->createArticle(id, title, author, text)) {
+            mh.sendCode(Protocol::ANS_NAK);
+            mh.sendCode(Protocol::ERR_NG_DOES_NOT_EXIST);
+        } else {
+            mh.sendCode(Protocol::ANS_ACK);
         }
     }
 
-    void MessageInterpreter::getArt(MessageHandler& msgHandler, Database& database) throw(IllegalCommandException, ConnectionClosedException) {
-        int ngId = msgHandler.recvIntParameter();
-        int artId = msgHandler.recvIntParameter();
-        if(msgHandler.recvCode() != Protocol::COM_END) throw IllegalCommandException();
-        msgHandler.sendCode(Protocol::ANS_GET_ART);
+    void MessageInterpreter::deleteArt() throw(IllegalCommandException, ConnectionClosedException) {
+        int ngId = mh.recvIntParameter();
+        int artId = mh.recvIntParameter();
+        if(mh.recvCode() != Protocol::COM_END) throw IllegalCommandException();
+        mh.sendCode(Protocol::ANS_DELETE_ART);
         try {
-            Article* artP = database.getArticle(ngId, artId);
-            msgHandler.sendCode(Protocol::ANS_ACK);
-            msgHandler.sendStringParameter(artP->getTitle());
-            msgHandler.sendStringParameter(artP->getAuthor());
-            msgHandler.sendStringParameter(artP->getText());
+            db->deleteArticle(ngId, artId);
+            mh.sendCode(Protocol::ANS_ACK);
         } catch (NgNotFoundException ngE) {
-            msgHandler.sendCode(Protocol::ANS_NAK);
-            msgHandler.sendCode(Protocol::ERR_NG_DOES_NOT_EXIST);
+            mh.sendCode(Protocol::ANS_NAK);
+            mh.sendCode(Protocol::ERR_NG_DOES_NOT_EXIST);
         } catch (ArtNotFoundException artE) {
-            msgHandler.sendCode(Protocol::ANS_NAK);
-            msgHandler.sendCode(Protocol::ERR_ART_DOES_NOT_EXIST);
+            mh.sendCode(Protocol::ANS_NAK);
+            mh.sendCode(Protocol::ERR_ART_DOES_NOT_EXIST);
+        }
+    }
+
+    void MessageInterpreter::getArt() throw(IllegalCommandException, ConnectionClosedException) {
+        int ngId = mh.recvIntParameter();
+        int artId = mh.recvIntParameter();
+        if(mh.recvCode() != Protocol::COM_END) throw IllegalCommandException();
+        mh.sendCode(Protocol::ANS_GET_ART);
+        try {
+            Article* artP = db->getArticle(ngId, artId);
+            mh.sendCode(Protocol::ANS_ACK);
+            mh.sendStringParameter(artP->getTitle());
+            mh.sendStringParameter(artP->getAuthor());
+            mh.sendStringParameter(artP->getText());
+        } catch (NgNotFoundException ngE) {
+            mh.sendCode(Protocol::ANS_NAK);
+            mh.sendCode(Protocol::ERR_NG_DOES_NOT_EXIST);
+        } catch (ArtNotFoundException artE) {
+            mh.sendCode(Protocol::ANS_NAK);
+            mh.sendCode(Protocol::ERR_ART_DOES_NOT_EXIST);
         }
     }
 }

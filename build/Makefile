@@ -4,7 +4,7 @@
 #
 
 CXX		 = g++
-CXXFLAGS	 = -ggdb  -Wall -W -Werror -pedantic-errors
+CXXFLAGS	 = -std=c++11 -ggdb -Wall -W -Werror -pedantic-errors
 CXXFLAGS	+= -Wmissing-braces -Wparentheses
 # The following option cannot be used since some of the socket
 # macros give warnings on "old-style-cast"
@@ -35,7 +35,7 @@ clean:
 uninstall: 
 	rm -r bin
 
-server: ../src/server/serverhandler.o ../src/server/messageinterpreter.o ../src/com/messagehandler.o ../src/database/inmemorydatabase.o ../src/database/article.o ../src/database/newsgroup.o libclientserver.a
+server: ../src/server/serverhandler.o ../src/server/messageinterpreter.o ../src/com/messagehandler.o ../src/database/inmemorydatabase.o ../src/database/article.o ../src/database/newsgroup.o ../src/database/filesystemdatabase.o libclientserver.a
 		 $(CXX) -o $@ $^
 
 client: ../src/client/client.o ../src/client/messageinterpreter.o ../src/client/commandhandler.o ../src/com/messagehandler.o ../src/com/connection.o  libclientserver.a

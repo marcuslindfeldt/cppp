@@ -12,6 +12,7 @@
 
     struct NgNotFoundException{};
     struct ArtNotFoundException{};
+    struct BasedirNotFoundException{};
 
     class Database {
         public:

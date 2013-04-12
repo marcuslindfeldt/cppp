@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include "server.h"
 #include "../database/inmemorydatabase.h"
+#include "../database/filesystemdatabase.h"
 
 #include "messageinterpreter.h"
 #include "../com/messagehandler.h"
@@ -14,7 +15,6 @@ using namespace std;
 
 int main (int argc, char** argv){
 
-	cout << argc;
     if(argc != 2) {
         cerr << "Wrong arguments provided, usage: myserver port-number " << endl;
         exit(1);
@@ -24,17 +24,18 @@ int main (int argc, char** argv){
         cerr << "Server init failed" << endl;
         exit(1);
     }
-    Database* db = new InMemoryDatabase();
+    string basedir("../../data");
+    Database* db = new FilesystemDatabase(basedir);
     cout << "Server running at port: " << argv[1] << endl;
     while(true){
         Connection* conn = server.waitForActivity();
         MessageHandler mh (conn);
-        MessageInterpreter mi;
+        MessageInterpreter mi(mh, db);
         try {
             if(conn != 0) {
                 cout << "Connection established" << endl;
                 try {
-                mi.interpretAndPerformCmd(mh, *db);
+                mi.interpretAndPerformCmd();
 
                 }
                 catch(IllegalCommandException&){

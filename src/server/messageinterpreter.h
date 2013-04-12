@@ -8,16 +8,18 @@ namespace server {
 
     class MessageInterpreter {
         public:
-            MessageInterpreter(){}
-            void interpretAndPerformCmd(com::MessageHandler& mh, database::Database& db) throw(com::IllegalCommandException, com::ConnectionClosedException);
+            MessageInterpreter(com::MessageHandler& mh, database::Database* db):mh(mh),db(db){};
+            void interpretAndPerformCmd() throw(com::IllegalCommandException, com::ConnectionClosedException);
         private:
-            void listNg(com::MessageHandler& mh, database::Database& db) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void createNg(com::MessageHandler& mh, database::Database& db) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void deleteNg(com::MessageHandler& mh, database::Database& db) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void listArt(com::MessageHandler& mh, database::Database& db) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void createArt(com::MessageHandler& mh, database::Database& db) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void deleteArt(com::MessageHandler& mh, database::Database& db) throw(com::IllegalCommandException, com::ConnectionClosedException);
-            void getArt(com::MessageHandler& mh, database::Database& db) throw(com::IllegalCommandException, com::ConnectionClosedException);
+            void listNg() throw(com::IllegalCommandException, com::ConnectionClosedException);
+            void createNg() throw(com::IllegalCommandException, com::ConnectionClosedException);
+            void deleteNg() throw(com::IllegalCommandException, com::ConnectionClosedException);
+            void listArt() throw(com::IllegalCommandException, com::ConnectionClosedException);
+            void createArt() throw(com::IllegalCommandException, com::ConnectionClosedException);
+            void deleteArt() throw(com::IllegalCommandException, com::ConnectionClosedException);
+            void getArt() throw(com::IllegalCommandException, com::ConnectionClosedException);
+            com::MessageHandler& mh;
+            database::Database* db;
     };
 }
 #endif
