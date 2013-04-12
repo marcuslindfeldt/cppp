@@ -1,7 +1,7 @@
 #include "messageinterpreter.h"
 #include "../com/protocol.h"
 #include <string>
-
+#include <iostream>
 using namespace com;
 using namespace std;
 
@@ -41,7 +41,9 @@ ostream& MessageInterpreter::listNg(MessageHandler& msgHandler, ostream& out) th
 	int nbrRows = msgHandler.recvIntParameter();
 	if (nbrRows > 0) {
 		for(int i = 0; i < nbrRows; ++i) {
-			out <<  msgHandler.recvIntParameter() << ". " << msgHandler.recvStringParameter() << endl; // Important to follow the convention in messageHandler for dataflow!!
+			int k = msgHandler.recvIntParameter();
+			string str = msgHandler.recvStringParameter(); // cant call these functions in a stream.
+			out <<  k << ". " << str << endl; // Important to follow the convention in messageHandler for dataflow!!
 		}
 	} else {
 		out << "No Newsgroups." << endl;
@@ -54,7 +56,8 @@ ostream& MessageInterpreter::createNg(MessageHandler& msgHandler, ostream& out) 
 	if(msgHandler.recvCode() == Protocol::ANS_ACK) {
 		out << "Newsgroup was successfully created." << endl;
 	} else {
-		out << "ERROR " << msgHandler.recvCode() << ": Newsgroup already exists.";
+		int k = msgHandler.recvCode();
+		out << "ERROR " << k << ": Newsgroup already exists.";
 	}
 	if(msgHandler.recvCode() != Protocol::ANS_END) throw IllegalCommandException();
 	return out;
@@ -64,7 +67,8 @@ ostream& MessageInterpreter::deleteNg(MessageHandler& msgHandler, ostream& out) 
 	if(msgHandler.recvCode() == Protocol::ANS_ACK) {
 		out << "Newsgroup was successfully deleted." << endl;
 	} else {
-		out << "ERROR " << msgHandler.recvCode() << ": Newsgroup does not exist.";
+		int k = msgHandler.recvCode();
+		out << "ERROR " << k << ": Newsgroup does not exist.";
 	}
 	if(msgHandler.recvCode() != Protocol::ANS_END) throw IllegalCommandException();
 	return out;
@@ -75,7 +79,9 @@ ostream& MessageInterpreter::listArt(MessageHandler& msgHandler, ostream& out) t
 		int nbrRows = msgHandler.recvIntParameter();
 		if (nbrRows > 0) {
 			for(int i = 0; i < nbrRows; ++i) {
-				out << msgHandler.recvIntParameter() << ". " << msgHandler.recvStringParameter() << endl;
+				 int k = msgHandler.recvIntParameter();
+				string str = msgHandler.recvStringParameter();
+				out << k << ". " << str << endl;
 			}
 		} else {
 			out << "No Articles." << endl;
@@ -88,10 +94,11 @@ ostream& MessageInterpreter::listArt(MessageHandler& msgHandler, ostream& out) t
 }
 
 ostream& MessageInterpreter::createArt(MessageHandler& msgHandler, ostream& out) throw(IllegalCommandException, ConnectionClosedException) {
-	if(msgHandler.recvCode() == Protocol::ANS_ACK) {
+	int k = msgHandler.recvCode();
+	if(k == Protocol::ANS_ACK) {
 		out << "Article was successfully created." << endl;
 	} else {
-		out << "ERROR " << msgHandler.recvCode() << ": Newsgroup does not exist.";
+		out << "ERROR "  << ": Newsgroup does not exist.";
 	}
 	if(msgHandler.recvCode() != Protocol::ANS_END) throw IllegalCommandException();
 	return out;
@@ -114,7 +121,9 @@ ostream& MessageInterpreter::deleteArt(MessageHandler& msgHandler, ostream& out)
 
 ostream& MessageInterpreter::getArt(MessageHandler& msgHandler, ostream& out) throw(IllegalCommandException, ConnectionClosedException) {
 	if(msgHandler.recvCode() == Protocol::ANS_ACK) {
-		out << "Title: " << msgHandler.recvStringParameter() << endl << "Author: " << msgHandler.recvStringParameter() << endl << msgHandler.recvStringParameter();
+		string title = msgHandler.recvStringParameter();
+		string author = msgHandler.recvStringParameter();
+		out << "Title: " << title << endl << "Author: " << author << endl << msgHandler.recvStringParameter();
 	} else {
 		int code = msgHandler.recvCode();
 		if(code == Protocol::ERR_NG_DOES_NOT_EXIST) {

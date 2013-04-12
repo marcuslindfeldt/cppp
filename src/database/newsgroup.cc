@@ -6,6 +6,10 @@ using namespace std;
 
 namespace database {
 
+    Newsgroup::Newsgroup(const string& n): name(n) {
+    lastArticleId = 0;
+
+    }
 	void Newsgroup::addArticle(const string& ti, const string& a, const string& te) {
 		size_t id = ++lastArticleId;
 		Article article(ti,a,te);
