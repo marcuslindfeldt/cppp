@@ -15,7 +15,7 @@ using namespace std;
 
 int main (int argc, char** argv){
 
-    if(argc != 2) {
+    if(argc != 3) {
         cerr << "Wrong arguments provided, usage: myserver port-number " << endl;
         exit(1);
     }
@@ -24,9 +24,22 @@ int main (int argc, char** argv){
         cerr << "Server init failed" << endl;
         exit(1);
     }
-    string basedir("../../data");
-    Database* db = new FilesystemDatabase(basedir);
-    cout << "Server running at port: " << argv[1] << endl;
+    string typeOfDb = argv[1];
+    Database* db;
+    if(typeOfDb == "memdb" ){
+        db = new InMemoryDatabase();
+
+    }
+    else if(typeOfDb == "filedb"){
+        string basedir("../../data");
+        db = new FilesystemDatabase(basedir);
+
+    }
+    else {
+        cerr << "Database type does not exist" << endl;
+    }
+
+    cout << "Server running at port: " << argv[2] << endl;
     while(true){
         Connection* conn = server.waitForActivity();
         MessageHandler mh (conn);
