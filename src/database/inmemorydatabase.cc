@@ -34,7 +34,7 @@ namespace database {
     }
 
     bool InMemoryDatabase::deleteNewsgroup(size_t ngId) {
-        return db.erase(ngId) !=0;
+        return db.erase(ngId) != 0;
     }
 
     bool InMemoryDatabase::createArticle(size_t ngId, const string& title, const string& author, const string& text) {
@@ -53,9 +53,8 @@ namespace database {
     Article* InMemoryDatabase::getArticle(size_t ngId, size_t artId) throw(NgNotFoundException, ArtNotFoundException) {
         map<size_t, Newsgroup>::iterator it = db.find(ngId);
         if(it == db.end()) throw NgNotFoundException();
-
         Article* artP = it->second.getArticle(artId);
-        if(artP == 0) throw ArtNotFoundException();
+        if(artP == 0) throw ArtNotFoundException(); // How do we handle this?
         return artP;
     }
 

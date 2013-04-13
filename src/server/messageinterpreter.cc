@@ -87,7 +87,7 @@ namespace server {
                 mh.sendIntParameter(it->first);
                 mh.sendStringParameter(it->second.getTitle());
             }
-        } catch (NgNotFoundException e) {
+        } catch (NgNotFoundException& e) {
             mh.sendCode(Protocol::ANS_NAK);
             mh.sendCode(Protocol::ERR_NG_DOES_NOT_EXIST);
         }
@@ -116,10 +116,10 @@ namespace server {
         try {
             db->deleteArticle(ngId, artId);
             mh.sendCode(Protocol::ANS_ACK);
-        } catch (NgNotFoundException ngE) {
+        } catch (NgNotFoundException& ngE) {
             mh.sendCode(Protocol::ANS_NAK);
             mh.sendCode(Protocol::ERR_NG_DOES_NOT_EXIST);
-        } catch (ArtNotFoundException artE) {
+        } catch (ArtNotFoundException& artE) {
             mh.sendCode(Protocol::ANS_NAK);
             mh.sendCode(Protocol::ERR_ART_DOES_NOT_EXIST);
         }
@@ -136,10 +136,10 @@ namespace server {
             mh.sendStringParameter(artP->getTitle());
             mh.sendStringParameter(artP->getAuthor());
             mh.sendStringParameter(artP->getText());
-        } catch (NgNotFoundException ngE) {
+        } catch (NgNotFoundException& ngE) {
             mh.sendCode(Protocol::ANS_NAK);
             mh.sendCode(Protocol::ERR_NG_DOES_NOT_EXIST);
-        } catch (ArtNotFoundException artE) {
+        } catch (ArtNotFoundException& artE) {
             mh.sendCode(Protocol::ANS_NAK);
             mh.sendCode(Protocol::ERR_ART_DOES_NOT_EXIST);
         }

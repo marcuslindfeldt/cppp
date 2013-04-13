@@ -82,25 +82,25 @@ struct StringHelper{
 		cout << "Input is of the form: \n";
 		switch(tmp){
 		case com::Protocol::COM_LIST_NG:
-			cout << """listNewsGroup""" << endl;;
+			cout << """listnewsgroup""" << endl;;
 			break;
 		case com::Protocol::COM_CREATE_NG:
-			cout << """createNewsGroup""" << delim << "name" << endl;
+			cout << """createnewsgroup""" << delim << "name" << endl;
 			break;
 		case com::Protocol::COM_DELETE_NG:
-			cout << """deleteNewsGroup""" << delim << "name" << endl;
+			cout << """deletenewsgroup""" << delim << "name" << endl;
 			break;
 		case com::Protocol::COM_LIST_ART:
-			cout << """listArticle""" << delim << "name" << endl;
+			cout << """listarticle""" << delim << "name" << endl;
 			break;
 		case com::Protocol::COM_CREATE_ART:
-			cout << """createArticle""" << delim << "ArtIDnbr" << delim << "title" << delim << "author" << delim << "text" << endl;
+			cout << """createarticle""" << delim << "ArtIDnbr" << delim << "title" << delim << "author" << delim << "text" << endl;
 			break;
 		case com::Protocol::COM_DELETE_ART:
-			cout << """deleteArticle""" << delim << "groupIDnbr" << delim << "ArtIDNbr" << endl;
+			cout << """deletearticle""" << delim << "groupIDnbr" << delim << "ArtIDNbr" << endl;
 			break;
 		case com::Protocol::COM_GET_ART:
-			cout << """getArticle""" << delim << "groupIDnbr" << delim << "ArtIDNbr" << endl;
+			cout << """getarticle""" << delim << "groupIDnbr" << delim << "ArtIDNbr" << endl;
 			break;
 		default:
 			throw com::IllegalCommandException();
@@ -120,13 +120,13 @@ int main(int argc, char* argv[]) {
 	//Changing of command-interface can be done from client.
 	std::map< std::string, int > mymap;
 
-    mymap["listNewsGroup"] = com::Protocol::COM_LIST_NG;
-    mymap["createNewsGroup"] = com::Protocol::COM_CREATE_NG;
-    mymap["deleteNewsGroup"] = com::Protocol::COM_DELETE_NG;
-    mymap["listArticle"] = com::Protocol::COM_LIST_ART;
-    mymap["createArticle"] = com::Protocol::COM_CREATE_ART;
-    mymap["deleteArticle"] = com::Protocol::COM_DELETE_ART;
-    mymap["getArticle"] = com::Protocol::COM_GET_ART;
+    mymap["listnewsgroup"] = com::Protocol::COM_LIST_NG;
+    mymap["createnewsgroup"] = com::Protocol::COM_CREATE_NG;
+    mymap["deletenewsgroup"] = com::Protocol::COM_DELETE_NG;
+    mymap["listarticle"] = com::Protocol::COM_LIST_ART;
+    mymap["createarticle"] = com::Protocol::COM_CREATE_ART;
+    mymap["deletearticle"] = com::Protocol::COM_DELETE_ART;
+    mymap["getarticle"] = com::Protocol::COM_GET_ART;
 
 	char delim = '-';
 	com::Connection connection(argv[1], atoi(argv[2]));
@@ -142,6 +142,7 @@ int main(int argc, char* argv[]) {
 	cout << "Enter ""help"" for help on arguments" << endl;
 	while(1){
 		try{
+			cout << endl;
 			cout << "What do you want to do?" << endl;
 			string tmp;
 			cin >> input(tmp);
@@ -159,6 +160,9 @@ int main(int argc, char* argv[]) {
 			msginterp.interpretAnsAndBuildRes(messageHandler, std::cout);
 		} catch(com::IllegalCommandException&){
 			cout << "That was an illegal command!" << endl;
+		} catch (com::ConnectionClosedException&) {
+			cout << "The connection has been terminated" << endl;
+			return(0);
 		}
 	}
 }

@@ -21,6 +21,8 @@ namespace database {
 	}
 
 	Article* Newsgroup::getArticle(size_t i) {
+		std::map<size_t, Article> ::iterator it = articles.find(i);
+		if(it == articles.end()) return NULL;
 		return &articles.find(i)->second;
 	}
 }
