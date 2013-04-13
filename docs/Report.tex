@@ -17,7 +17,7 @@
             \and
         Marcus LindFeldt (ada08mli@student.lu.se)
             \and
-        [Robobuilder enter name and email here]
+        Daniel Hilton (ael09dhi@student.lu.se)
 }
 \date{\today}
 \begin{document}
@@ -57,7 +57,7 @@ The protocol codes sent to the client are read in MessageIntepreter via the Mess
 ServerHandler is the main class on the application server side. It uses the provided server class and utilizes the waitForActivity function to establish a connection with the client. When a connection has been established ServerHandler calls the MessageInterpreter function interpretAndPerform which reads the command from the client.
 
 \subsection{Client}
-[Robobuilder insert knowledge here]
+The client is implemented as to be as easy and intuitive to use from the command line, the command is entered after a certain, stated, input sequence and is then sent as a string to the commandhandler class. The command handler class then parses the input excecutes the corresponding command. The actual implementation of the client-side is designed so that all of the major changes or alterations can be done from the client class. Thus future changes to the implementation of the user interface are all parsed from the client class.
 
 \section{Communication}\label{communication}
 [Flow chart of how the communication is carried out from inserting a command to the result printed out in the client]
