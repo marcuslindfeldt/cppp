@@ -60,7 +60,17 @@ ServerHandler is the main class on the application server side. It uses the prov
 The client is implemented as to be as easy and intuitive to use from the command line, the command is entered after a certain, stated, input sequence and is then sent as a string to the commandhandler class. The command handler class then parses the input excecutes the corresponding command. The actual implementation of the client-side is designed so that all of the major changes or alterations can be done from the client class. Thus future changes to the implementation of the user interface are all parsed from the client class.
 
 \section{Communication}\label{communication}
-[Flow chart of how the communication is carried out from inserting a command to the result printed out in the client]
+An instance of how the data flows in the system is briefly described below.
+
+\begin{enumerate}
+    \item The dataflow starts with a client sending a command, this command will be fetched by the waitForActivity() method in the server. This method will return a pointer to that connection.
+	\item The server will then try to interpret the command that was sent. This is done by letting a MessageHandler read the data sent on the connection and then interpret what command was sent in the MessageInterpreter.
+	\item First a code is read and that determines what type of command was sent. After that the appropriate helper function is called reading the rest of the command according to the protocol. In case of any errors the connection is closed.
+	\item When the command is interpreted the correct method is called in the database. Lets say that the client wants to create an article in other words the method createArticle() is called.
+	\item First it is verified that the newsgroup exists. If so the article is created with the sent information.
+	\item To let the client know that everything went well the server sends back an ACK as described in the protocol.
+	\item The server is now once again waiting for an activity on the socket.
+\end{enumerate}
 
 \section{Summary}\label{summary}
 
