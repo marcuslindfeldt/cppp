@@ -19,7 +19,7 @@ int main (int argc, char** argv){
         cerr << "Wrong arguments provided, usage: myserver port-number " << endl;
         exit(1);
     }
-    Server server(atoi(argv[1]));
+    Server server(atoi(argv[2]));
     if(!server.isReady()) {
         cerr << "Server init failed" << endl;
         exit(1);
