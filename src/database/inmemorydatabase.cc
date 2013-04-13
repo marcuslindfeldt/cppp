@@ -54,7 +54,7 @@ namespace database {
         map<size_t, Newsgroup>::iterator it = db.find(ngId);
         if(it == db.end()) throw NgNotFoundException();
         Article* artP = it->second.getArticle(artId);
-        if(artP == 0) throw ArtNotFoundException(); // How do we handle this?
+        if(artP == 0) throw ArtNotFoundException();
         return artP;
     }
 
