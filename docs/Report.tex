@@ -15,7 +15,7 @@
             \and
         Fredrik Pettersson (ada09fpe@student.lu.se)
             \and
-        Marcus LindFeldt (ada08mli@student.lu.se)
+        Marcus Lindfeldt (ada08mli@student.lu.se)
             \and
         Daniel Hilton (ael09dhi@student.lu.se)
 }
@@ -45,7 +45,7 @@ The Message Handler is used to receive and send data via the communication socke
 This implementation of the database stores the information in the primary memory and destroys it when the server is terminated. It simply uses a map to store the newsgroups where the key is the id number of the newsgroup. Each newsgroup has it's own map to store their articles and the key is the id number of the article. Articles store the title, author and text as strings.
 
 \subsubsection{File}
-[Marcus insert knowledge here]
+The file-system database stores the information permanently on disk with the use of simple text files and directories. A base directory is chosen and in it each newsgroup is represented by a directory with a name consisting of the newsgroup ID concatenated with the newsgroup name. Each newsgroup directory can have multiple files representing articles. An article file is named by it's ID and the contents consists of the title, author \& article text, each separated by a newline.
 
 \subsection{Server}
  The server listens to a port, waiting for connections. When a conenction has been established it uses Message Interpreter and to intepret commands sent from the client. MessageHandler is used to receive and send data between the client and server. MessageHandler is used to receive and send data between the client and server.   
