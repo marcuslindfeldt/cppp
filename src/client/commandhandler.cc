@@ -25,82 +25,86 @@ void CommandHandler::interpretAndPerformCmd(com::MessageHandler& msgHandler, std
 				back_inserter<vector<string> >(arguments));
 	 */
 	if(arguments.size() > 0) {
-		map<string, int>::const_iterator it = mymap.find(arguments.at(0));
-		if(it != mymap.end()){
-			int protocolNbr =  it->second;
-			string stringParam;
-			const char* grp;
-			const char* art;
-			const char* id;
-			int grpID;
-			int artID;
-			switch(arguments.size()){
-			case 1:
-				switch(protocolNbr){
-				case Protocol::COM_LIST_NG:
-					listNg(msgHandler);
-					break;
-				default:
-					throw IllegalCommandException();
-					break;
-				}
-				break;
-				case 2:
-					stringParam = arguments.at(1);
-					switch(protocolNbr) {
-					case Protocol::COM_CREATE_NG:
-						createNg(msgHandler, stringParam);
-						break;
-					case Protocol::COM_DELETE_NG:
-						deleteNg(msgHandler, stringParam);
-						break;
-					case Protocol::COM_LIST_ART:
-						listArt(msgHandler, stringParam);
+		try{
+			map<string, int>::const_iterator it = mymap.find(arguments.at(0));
+			if(it != mymap.end()){
+				int protocolNbr =  it->second;
+				string stringParam;
+				const char* grp;
+				const char* art;
+				const char* id;
+				int grpID;
+				int artID;
+				switch(arguments.size()){
+				case 1:
+					switch(protocolNbr){
+					case Protocol::COM_LIST_NG:
+						listNg(msgHandler);
 						break;
 					default:
 						throw IllegalCommandException();
 						break;
 					}
 					break;
-					case 3:
-						grp = (arguments[1]).c_str();
-						art = (arguments[2]).c_str();
-						grpID = atoi(grp);
-						artID = atoi(art);
+					case 2:
+						stringParam = arguments.at(1);
 						switch(protocolNbr) {
-						case Protocol::COM_DELETE_ART:
-							deleteArt(msgHandler, grpID, artID);
+						case Protocol::COM_CREATE_NG:
+							createNg(msgHandler, stringParam);
 							break;
-						case Protocol::COM_GET_ART:
-							getArt(msgHandler, grpID, artID);
+						case Protocol::COM_DELETE_NG:
+							deleteNg(msgHandler, stringParam);
+							break;
+						case Protocol::COM_LIST_ART:
+							listArt(msgHandler, stringParam);
 							break;
 						default:
 							throw IllegalCommandException();
 							break;
 						}
 						break;
-						case 5:
+						case 3:
+							grp = (arguments[1]).c_str();
+							art = (arguments[2]).c_str();
+							grpID = atoi(grp);
+							artID = atoi(art);
 							switch(protocolNbr) {
-							case Protocol::COM_CREATE_ART:
-								id = arguments[1].c_str();
-								artID = atoi(id);
-								createArt(msgHandler, artID, arguments[2],arguments[3],arguments[4]);
+							case Protocol::COM_DELETE_ART:
+								deleteArt(msgHandler, grpID, artID);
+								break;
+							case Protocol::COM_GET_ART:
+								getArt(msgHandler, grpID, artID);
 								break;
 							default:
 								throw IllegalCommandException();
 								break;
 							}
 							break;
-							default:
-								throw IllegalCommandException();
+							case 5:
+								switch(protocolNbr) {
+								case Protocol::COM_CREATE_ART:
+									id = arguments[1].c_str();
+									artID = atoi(id);
+									createArt(msgHandler, artID, arguments[2],arguments[3],arguments[4]);
+									break;
+								default:
+									throw IllegalCommandException();
+									break;
+								}
 								break;
-			}
+								default:
+									throw IllegalCommandException();
+									break;
+				}
 
-		}else{
+			}else{
+				throw IllegalCommandException();
+			}
+			arguments.erase(arguments.begin(), arguments.end()); // Erase arguments container for nexttime.
+		} catch( com::IllegalCommandException& err){
 			arguments.erase(arguments.begin(), arguments.end());
-			throw IllegalCommandException();
+			throw err;
 		}
-		arguments.erase(arguments.begin(), arguments.end());
 	}else{
 		throw IllegalCommandException();
 	}
