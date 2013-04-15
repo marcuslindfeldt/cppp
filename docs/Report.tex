@@ -8,15 +8,17 @@
     Programming Project \\
     C++ Programming(EDA031)
 }
+
 \author{
-        Department of Computer Science \\
-            \\
+		Department of Computer Science
+		\\
+		\\
         Simon Thörnqvist (ada09st1@student.lu.se)
-            \and
+        	\\
         Fredrik Pettersson (ada09fpe@student.lu.se)
-            \and
+        \\
         Marcus Lindfeldt (ada08mli@student.lu.se)
-            \and
+        \\
         Daniel Hilton (ael09dhi@student.lu.se)
 }
 \date{\today}
@@ -73,6 +75,7 @@ An instance of how the data flows in the system is briefly described below.
 \end{enumerate}
 
 \section{Summary}\label{summary}
+Although the system has not been extensively tested we believe that we fulfil all requirements. Some of the classes could be re-factored and optimized but we think that the overall design is pretty good. An example of such an optimization could be to use the decorator pattern for the FilesystemDatabase and injecting the InMemoryDatabase into it. That would allow you to store all or a subset of articles/newsgroups in-memory so that you don't have to open a filestream every time you need to use a ``read'' operation.
 
 \newpage
 \appendix
