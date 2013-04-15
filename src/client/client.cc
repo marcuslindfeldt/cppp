@@ -22,38 +22,35 @@ using com::Protocol;
  */
 
 template <typename T>
-struct input_t
+struct input_type
 {
 	T& n;
-	explicit input_t( T& n ): n( n ) {}
-	input_t( const input_t <T> & i ): n( i.n ) {}
+	explicit input_type(T& n): n(n) {}
+	input_type( const input_type <T>& i): n(i.n) {}
 };
 
 template <typename T>
-inline
-input_t <T>
-input( T& n )
+input_type <T>
+input(T& n)
 {
-	input_t <T> result( n );
+	input_type <T> result(n);
 	return result;
 }
 
 template <typename T>
-istream& operator >> ( istream& ins, const input_t <T> & input )
+istream& operator >> ( istream& in, const input_type <T>& input )
 {
-	// Read a line ended by newline
 	string str;
-	getline( ins, str );
+	getline(in, str);
 
-	// Read it into the type that is the target
-	istringstream ss( str );
-	ss >> input.n;
+	istringstream ss(str);
+	ss >> input.n; // Read the str into input.n if not right type there will be leftovers.
 
-	// Check to see that there is nothing left over
+	// Check to see that that everything has been read.
 	if (!ss.eof())
-		ins.setstate( ios::failbit );
+		in.setstate(ios::failbit);
 
-	return ins;
+	return in;
 }
 
 /**
