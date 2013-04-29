@@ -17,8 +17,10 @@ namespace client {
     public:
     	CommandHandler(com::MessageHandler& mh):mh(mh){}
     	// Parse command and perform appropriate action
-    	void parse(std::string& cmd) throw(com::IllegalCommandException, com::ConnectionClosedException);
+    	bool perform(std::string& cmd) throw(com::IllegalCommandException, com::ConnectionClosedException);
     private:
+        void createNg(std::vector<std::string> args) throw(com::IllegalCommandException, com::ConnectionClosedException);
+        void listNg() throw(com::IllegalCommandException, com::ConnectionClosedException);
         com::MessageHandler mh;
     };
 }

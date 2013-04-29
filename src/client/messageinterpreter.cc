@@ -57,7 +57,7 @@ ostream& MessageInterpreter::createNg(MessageHandler& msgHandler, ostream& out) 
 		out << "Newsgroup was successfully created." << endl;
 	} else {
 		int k = msgHandler.recvCode();
-		out << "ERROR " << k << ": Newsgroup already exists.";
+		out << "ERROR " << k << ": Newsgroup already exists." << endl;
 	}
 	if(msgHandler.recvCode() != Protocol::ANS_END) throw IllegalCommandException();
 	return out;
@@ -68,7 +68,7 @@ ostream& MessageInterpreter::deleteNg(MessageHandler& msgHandler, ostream& out) 
 		out << "Newsgroup was successfully deleted." << endl;
 	} else {
 		int k = msgHandler.recvCode();
-		out << "ERROR " << k << ": Newsgroup does not exist.";
+		out << "ERROR " << k << ": Newsgroup does not exist." << endl;
 	}
 	if(msgHandler.recvCode() != Protocol::ANS_END) throw IllegalCommandException();
 	return out;
@@ -87,7 +87,7 @@ ostream& MessageInterpreter::listArt(MessageHandler& msgHandler, ostream& out) t
 			out << "No Articles." << endl;
 		}
 	} else {
-		out << "ERROR " << msgHandler.recvCode() << ": Newsgroup does not exist.";
+		out << "ERROR " << msgHandler.recvCode() << ": Newsgroup does not exist." << endl;
 	}
 	if(msgHandler.recvCode() != Protocol::ANS_END) throw IllegalCommandException();
 	return out;
@@ -98,7 +98,7 @@ ostream& MessageInterpreter::createArt(MessageHandler& msgHandler, ostream& out)
 	if(k == Protocol::ANS_ACK) {
 		out << "Article was successfully created." << endl;
 	} else {
-		out << "ERROR "  << ": Newsgroup does not exist.";
+		out << "ERROR "  << ": Newsgroup does not exist." << endl;
 	}
 	if(msgHandler.recvCode() != Protocol::ANS_END) throw IllegalCommandException();
 	return out;
@@ -110,9 +110,9 @@ ostream& MessageInterpreter::deleteArt(MessageHandler& msgHandler, ostream& out)
 	} else {
 		int code = msgHandler.recvCode();
 		if(code == Protocol::ERR_NG_DOES_NOT_EXIST) {
-			out << "ERROR " << code << ": Newsgroup does not exist.";
+			out << "ERROR " << code << ": Newsgroup does not exist." << endl;
 		} else {
-			out << "ERROR " << code << ": Article does not exist.";
+			out << "ERROR " << code << ": Article does not exist." << endl;
 		}
 	}
 	if(msgHandler.recvCode() != Protocol::ANS_END) throw IllegalCommandException();
@@ -127,9 +127,9 @@ ostream& MessageInterpreter::getArt(MessageHandler& msgHandler, ostream& out) th
 	} else {
 		int code = msgHandler.recvCode();
 		if(code == Protocol::ERR_NG_DOES_NOT_EXIST) {
-			out << "ERROR " << code << ": Newsgroup does not exist.";
+			out << "ERROR " << code << ": Newsgroup does not exist." << endl;
 		} else {
-			out << "ERROR " << code << ": Article does not exist.";
+			out << "ERROR " << code << ": Article does not exist." << endl;
 		}
 	}
 	if(msgHandler.recvCode() != Protocol::ANS_END) throw IllegalCommandException();

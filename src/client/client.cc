@@ -30,6 +30,7 @@ int main(int argc, char* argv[]) {
     }
 
 	MessageHandler mh(conn);
+	MessageInterpreter mi;
 	CommandHandler ch(mh);
 
 	while(true){
@@ -39,8 +40,10 @@ int main(int argc, char* argv[]) {
 			// parse & perform command
 			string cmd;
 			getline(cin, cmd);
-			ch.parse(cmd);
-
+			if(ch.perform(cmd)){
+				// if command successful, wait for result
+				mi.interpretAnsAndBuildRes(mh, cout);
+			}
 		} catch(IllegalCommandException){
 			cout << "Command not defined, type \"help\" " 
 				 << "for a list of available commands." << endl;
