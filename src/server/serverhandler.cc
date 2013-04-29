@@ -14,32 +14,31 @@ using namespace database;
 using namespace std;
 
 int main (int argc, char** argv){
-
-    if(argc != 3) {
-        cerr << "Wrong arguments provided, usage: myserver port-number " << endl;
+    if(argc < 2) {
+        cerr << "usage: server <port> [memdb|filedb]" << endl;
         exit(1);
     }
-    Server server(atoi(argv[2]));
+
+    Server server(atoi(argv[1]));
     if(!server.isReady()) {
         cerr << "Server init failed" << endl;
         exit(1);
     }
-    string typeOfDb = argv[1];
     Database* db;
-    if(typeOfDb == "memdb" ){
-        db = new InMemoryDatabase();
-
+    if(argc == 3){
+        string typeOfDb = argv[2];
+        if(typeOfDb == "filedb"){
+            string basedir("../../data");
+            db = new FilesystemDatabase(basedir);
+        } else {
+            cerr << "Database type does not exist" << endl;
+            exit(1);
+        }
+    }else{
+        db = new InMemoryDatabase();        
     }
-    else if(typeOfDb == "filedb"){
-        string basedir("../../data");
-        db = new FilesystemDatabase(basedir);
 
-    }
-    else {
-        cerr << "Database type does not exist" << endl;
-    }
-
-    cout << "Server running at port: " << argv[2] << endl;
+    cout << "Server running at port: " << argv[1] << endl;
     while(true){
         Connection* conn = server.waitForActivity();
         MessageHandler mh (conn);
