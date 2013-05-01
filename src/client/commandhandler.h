@@ -6,10 +6,9 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include <algorithm>
 #include <iterator>
 #include <vector>
-#include <map>
+#include <stdexcept>
 
 namespace client {
 
@@ -17,11 +16,16 @@ namespace client {
     public:
     	CommandHandler(com::MessageHandler& mh):mh(mh){}
     	// Parse command and perform appropriate action
-    	bool perform(std::string& cmd) throw(com::IllegalCommandException, com::ConnectionClosedException);
+    	bool perform(std::string& cmd) throw(com::IllegalCommandException, com::ConnectionClosedException, std::invalid_argument);
     private:
-        void createNg(std::vector<std::string> args) throw(com::IllegalCommandException, com::ConnectionClosedException);
-        void listNg() throw(com::IllegalCommandException, com::ConnectionClosedException);
-        com::MessageHandler mh;
+        void listNg() throw(com::ConnectionClosedException);
+        void createNg(std::vector<std::string> args) throw(com::ConnectionClosedException);
+        void deleteNg(std::vector<std::string> args) throw(com::ConnectionClosedException);
+        void listArt(std::vector<std::string> args) throw(com::ConnectionClosedException, std::invalid_argument);
+        void createArt(std::vector<std::string> args) throw(com::ConnectionClosedException, std::invalid_argument);
+        void deleteArt(std::vector<std::string> args) throw(com::ConnectionClosedException, std::invalid_argument);
+        void getArt(std::vector<std::string> args) throw(com::ConnectionClosedException, std::invalid_argument);
+        com::MessageHandler& mh;
     };
 }
 #endif

@@ -8,6 +8,7 @@
 #include "../com/protocol.h"
 
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <cstdlib>    /* for exit() and atoi() */
 #include <map>
@@ -44,6 +45,9 @@ int main(int argc, char* argv[]) {
 				// if command successful, wait for result
 				mi.interpretAnsAndBuildRes(mh, cout);
 			}
+		} catch(std::invalid_argument& e){
+			cout << "Invalid argument, type \"help\" " 
+				 << "for a list of available commands." << endl;
 		} catch(IllegalCommandException){
 			cout << "Command not defined, type \"help\" " 
 				 << "for a list of available commands." << endl;

@@ -123,7 +123,7 @@ ostream& MessageInterpreter::getArt(MessageHandler& msgHandler, ostream& out) th
 	if(msgHandler.recvCode() == Protocol::ANS_ACK) {
 		string title = msgHandler.recvStringParameter();
 		string author = msgHandler.recvStringParameter();
-		out << "Title: " << title << endl << "Author: " << author << endl << msgHandler.recvStringParameter();
+		out << "Title: " << title << endl << "Author: " << author << endl << msgHandler.recvStringParameter() << endl;
 	} else {
 		int code = msgHandler.recvCode();
 		if(code == Protocol::ERR_NG_DOES_NOT_EXIST) {

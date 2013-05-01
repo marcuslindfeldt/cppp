@@ -6,8 +6,9 @@ using namespace com;
 namespace client {
 
 	bool CommandHandler::perform(string& cmdstring) 
-	throw(com::IllegalCommandException, 
-	      com::ConnectionClosedException)
+	throw(IllegalCommandException, 
+	      ConnectionClosedException,
+	      invalid_argument)
 	{
 		// explode string on whitespace
 		stringstream ss(cmdstring);
@@ -21,17 +22,40 @@ namespace client {
 		args.erase(args.begin());
 
 		if(cmd == "list") {
-			this->listNg();
+			switch(args.size()){
+				case 0:
+					this->listNg();
+					break;
+				case 1:
+					this->listArt(args);
+					break;
+				default:
+				throw invalid_argument("");
+			}
 		}else if(cmd == "read") {
-			cout << "reading..." << endl;
+			this->getArt(args);
 		}else if(cmd == "create") {
 			switch(args.size()){
 				case 1:
 				this->createNg(args);
 				break;
+				case 4:
+				this->createArt(args);
+				break;
+				default:
+				throw invalid_argument("");
 			}
 		}else if(cmd == "delete") {
-			cout << "deleting..." << endl;
+			switch(args.size()){
+				case 1:
+				this->deleteNg(args);
+				break;
+				case 2:
+				this->deleteArt(args);
+				break;
+				default:
+				throw invalid_argument("");
+			}
 		}else if(cmd == "clear") {
 			cout << "\x1B[2J\x1B[H";
 			return false;
@@ -40,10 +64,10 @@ namespace client {
 		}else if(cmd == "help"){
 			cout << "Available commands:" << endl
 			<< "  list\t\t\t\t\tList all newsgroups" << endl
-			<< "  list <newsgroup>\t\t\tList articles in newsgroup" << endl
-			<< "  read <id>\t\t\t\tDisplay article" << endl
+			<< "  list <ngid>\t\t\t\tList articles in newsgroup" << endl
+			<< "  read <ngid> <id>\t\t\tDisplay article" << endl
 			<< "  create <newsgroup>\t\t\tCreate newsgroup" << endl
-			<< "  create <title> <author> <body>\tCreate article" << endl
+			<< "  create <ngid> <title> <author> <body>\tCreate article" << endl
 			<< "  delete <ngid>\t\t\t\tDelete newsgroup" << endl
 			<< "  delete <ngid> <id>\t\t\tDelete article" << endl
 			<< "  clear\t\t\t\t\tClear the screen" << endl
@@ -56,17 +80,91 @@ namespace client {
 		return true;
 	}
 
+	void CommandHandler::listNg() 
+		throw(ConnectionClosedException) 
+	{
+		mh.sendCode(Protocol::COM_LIST_NG);
+		mh.sendCode(Protocol::COM_END);
+	}
+
 	void CommandHandler::createNg(vector<string> args) 
-		throw(IllegalCommandException, 
-		      ConnectionClosedException) 
+		throw(ConnectionClosedException) 
 	{
 		mh.sendCode(Protocol::COM_CREATE_NG);
 		mh.sendStringParameter(args.front());
 		mh.sendCode(Protocol::COM_END);
 	}	
 
-	void CommandHandler::listNg() throw(IllegalCommandException, ConnectionClosedException) {
-		mh.sendCode(Protocol::COM_LIST_NG);
+
+	void CommandHandler::deleteNg(vector<string> args)
+		throw(ConnectionClosedException) 
+	{
+		if(args.size() < 1) throw invalid_argument("");
+
+		int ngid = stoi(args.front());
+
+		mh.sendCode(Protocol::COM_DELETE_NG);
+		mh.sendIntParameter(ngid);
 		mh.sendCode(Protocol::COM_END);
-	}	
+	}
+
+	void CommandHandler::listArt(vector<string> args)
+		throw(ConnectionClosedException,
+		      invalid_argument) 
+	{
+		int ngid = stoi(args.front());
+
+		mh.sendCode(Protocol::COM_LIST_ART);
+		mh.sendIntParameter(ngid);
+		mh.sendCode(Protocol::COM_END);
+	}
+
+	void CommandHandler::createArt(vector<string> args)
+		throw(ConnectionClosedException,
+		      invalid_argument) 
+	{
+		if(args.size() < 4) throw invalid_argument("");
+
+		int ngid = stoi(args[0]);
+		string title = args[1];
+		string author = args[2];
+		string body = args[3];
+
+		mh.sendCode(Protocol::COM_CREATE_ART);
+		mh.sendIntParameter(ngid);
+		mh.sendStringParameter(title);
+		mh.sendStringParameter(author);
+		mh.sendStringParameter(body);
+		mh.sendCode(Protocol::COM_END);
+	}
+
+	void CommandHandler::deleteArt(vector<string> args)
+		throw(ConnectionClosedException,
+		      invalid_argument) 
+	{
+		if(args.size() < 2) throw invalid_argument("");
+
+		int ngid = stoi(args[0]);
+		int artid = stoi(args[1]);
+		
+		mh.sendCode(Protocol::COM_DELETE_ART);
+		mh.sendIntParameter(ngid);
+		mh.sendIntParameter(artid);
+		mh.sendCode(Protocol::COM_END);
+	}
+
+	void CommandHandler::getArt(vector<string> args)
+		throw(ConnectionClosedException,
+		      invalid_argument) 
+	{
+		if(args.size() < 2) throw invalid_argument("");
+
+		int ngid = stoi(args[0]);
+		int artid = stoi(args[1]);
+		
+		mh.sendCode(Protocol::COM_GET_ART);
+		mh.sendIntParameter(ngid);
+		mh.sendIntParameter(artid);
+		mh.sendCode(Protocol::COM_END);
+	}		
 }

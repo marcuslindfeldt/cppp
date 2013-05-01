@@ -24,18 +24,14 @@ int main (int argc, char** argv){
         cerr << "Server init failed" << endl;
         exit(1);
     }
-    Database* db;
-    if(argc == 3){
-        string typeOfDb = argv[2];
-        if(typeOfDb == "filedb"){
-            string basedir("../../data");
-            db = new FilesystemDatabase(basedir);
-        } else {
-            cerr << "Database type does not exist" << endl;
-            exit(1);
-        }
+    Database* db = new InMemoryDatabase();
+    if(argc == 3 && string("filedb").compare(argv[2]) == 0){
+        delete db;
+        string basedir("../../data");
+        db = new FilesystemDatabase(basedir);
+        cout << "Filesystem database selected" << endl;
     }else{
-        db = new InMemoryDatabase();        
+        cout << "In-memory database selected" << endl;
     }
 
     cout << "Server running at port: " << argv[1] << endl;
@@ -47,13 +43,12 @@ int main (int argc, char** argv){
             if(conn != 0) {
                 cout << "Connection established" << endl;
                 try {
-                mi.interpretAndPerformCmd();
+                    mi.interpretAndPerformCmd();
 
                 }
                 catch(IllegalCommandException&){
-                server.deregisterConnection(conn);
-                delete conn;
-
+                    server.deregisterConnection(conn);
+                    delete conn;
                 }
             }
             else {
