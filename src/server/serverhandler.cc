@@ -25,9 +25,9 @@ int main (int argc, char** argv){
         exit(1);
     }
     Database* db = new InMemoryDatabase();
+    string basedir("../../data");
     if(argc == 3 && string("filedb").compare(argv[2]) == 0){
         delete db;
-        string basedir("../../data");
         db = new FilesystemDatabase(basedir);
         cout << "Filesystem database selected" << endl;
     }else{

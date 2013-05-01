@@ -19,8 +19,7 @@ namespace database {
 		size_t highest = 1;
 		if( (dir=opendir(baseDir.c_str())) ){
 			while( (entry = readdir(dir)) ) {
-				if( strcmp(entry->d_name, ".") != 0 && 
-				    strcmp(entry->d_name, "..") != 0) {
+				if( entry->d_name[0] != '.' ) {
 
 					string dir_name(entry->d_name);
 					size_t split_index = dir_name.find_first_of('-');
@@ -71,8 +70,7 @@ namespace database {
 		if( (dir=opendir(baseDir.c_str())) ){
 			while( (entry = readdir(dir) )){
 
-				if( strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
-
+				if( entry->d_name[0] != '.' ) {
 					string dir_name(entry->d_name);
 
 					size_t split_index = dir_name.find_first_of('-');
@@ -106,7 +104,7 @@ namespace database {
 
 		if( (dir=opendir(ngdir.c_str())) ) {
 			while( (entry = readdir(dir)) ) {
-				if( strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0 ) {
+				if( entry->d_name[0] != '.' ) {
 					art_id = entry->d_name;
 					// parse article
 					string file_path = ngdir + "/" + art_id;
@@ -143,8 +141,7 @@ namespace database {
 		int highest = 1;
 		if( (dir=opendir(ngdir.c_str())) ) {
 			while( (entry = readdir(dir)) ) {
-				if( strcmp(entry->d_name, ".") != 0 && 
-				    strcmp(entry->d_name, "..") != 0 &&
+				if( entry->d_name[0] != '.' &&
 				    atoi(entry->d_name) >= highest) {
 
 					highest = atoi(entry->d_name) + 1;
@@ -174,7 +171,7 @@ namespace database {
 
 		if( (dir=opendir(ngdir.c_str()) ) ){
 			while( (entry = readdir(dir) )){
-				if( strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0 ) {
+				if( entry->d_name[0] != '.' ) {
 					// delete contents
 					string path = ngdir + "/" + entry->d_name;
 					unlink(path.c_str());
