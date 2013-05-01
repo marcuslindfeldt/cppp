@@ -31,3 +31,11 @@ Available commands:
   quit                                  Exit the application
 ```
 
+Requirements
+--------------------
+
+This project requires the external c++ library "boost". 
+On Ubuntu the boost library can be installed by running:
+
+    sudo apt-get install libboost-dev
+
