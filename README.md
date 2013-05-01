@@ -1,20 +1,33 @@
 A News System 
-=============
-
+=========
 Run
 ----
 
-make all to compile and link, the executables client server are stored in the 'bin' folder
+Run "make" to compile and link, the executables client & server are stored in the "bin" folder
 
 Client: 
     
-    ./client 
+    ./client <host> <port> 
 
 Server:
     
-    ./server dbtype port-number
+    ./server <port> [memdb|filedb]
     
-dbtype should be filedb for file database or memdb for in memory database
 
 Usage
-------
+---------
+
+```
+news> help
+Available commands:
+  list                                  List all newsgroups
+  list <ngid>                           List articles in newsgroup
+  read <ngid> <id>                      Display article
+  create <newsgroup>                    Create newsgroup
+  create <ngid> <title> <author> <body> Create article
+  delete <ngid>                         Delete newsgroup
+  delete <ngid> <id>                    Delete article
+  clear                                 Clear the screen
+  quit                                  Exit the application
+```
+
