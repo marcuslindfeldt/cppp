@@ -1,7 +1,12 @@
 #include "commandhandler.h"
+#include <boost/tokenizer.hpp>
 
+using boost::tokenizer;
+using boost::escaped_list_separator;
 using namespace std;
 using namespace com;
+
+typedef tokenizer<escaped_list_separator<char> > so_tokenizer;
 
 namespace client {
 
@@ -10,10 +15,14 @@ namespace client {
 	      ConnectionClosedException,
 	      invalid_argument)
 	{
+
+	    so_tokenizer tok(cmdstring, escaped_list_separator<char>('\\', ' ', '\"'));
+	    so_tokenizer::iterator begin = tok.begin(); 
+	    so_tokenizer::iterator end = tok.end();
 		// explode string on whitespace
-		stringstream ss(cmdstring);
-		istream_iterator<string> begin(ss);
-		istream_iterator<string> end;
+		// stringstream ss(cmdstring);
+		// istream_iterator<string> begin(ss);
+		// istream_iterator<string> end;
 		vector<string> args(begin, end);
 
 		if(args.size() < 1) throw IllegalCommandException();
