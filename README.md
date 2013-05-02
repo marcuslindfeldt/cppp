@@ -16,6 +16,7 @@ Server:
 
 Usage
 ---------
+Arguments containing spaces should be surrounded with double quotes.
 
 ```
 news> help
